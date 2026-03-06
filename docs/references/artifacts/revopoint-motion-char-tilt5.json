@@ -1,0 +1,517 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T15:18:35.714279+00:00",
+  "tool": "scripts/turntable_motion_characterize.py",
+  "target": {
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "config": {
+    "move_command": "+CR,TILTVALUE=5;",
+    "poll_interval_seconds": 0.5,
+    "poll_total_seconds": 6.0
+  },
+  "result": {
+    "connected": true,
+    "baseline": {
+      "tilt": {
+        "sent_at_utc": "2026-03-06T15:18:37.283547+00:00",
+        "command": "+QR,TILTANGLE;",
+        "command_hex": "2b51522c54494c54414e474c453b",
+        "events": [
+          {
+            "received_at_utc": "2026-03-06T15:18:36.671545+00:00",
+            "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+            "payload": {
+              "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+              "ascii": "+DATA=-30.0,30.0,0.3;",
+              "utf8": "+DATA=-30.0,30.0,0.3;",
+              "errors": []
+            }
+          }
+        ]
+      },
+      "rotate": {
+        "sent_at_utc": "2026-03-06T15:18:38.046052+00:00",
+        "command": "+QT,TURNANGLE;",
+        "command_hex": "2b51542c5455524e414e474c453b",
+        "events": [
+          {
+            "received_at_utc": "2026-03-06T15:18:37.433487+00:00",
+            "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+            "payload": {
+              "hex": "2b444154413d302c3336302c312e303b",
+              "ascii": "+DATA=0,360,1.0;",
+              "utf8": "+DATA=0,360,1.0;",
+              "errors": []
+            }
+          }
+        ]
+      }
+    },
+    "motion_ack": {
+      "sent_at_utc": "2026-03-06T15:18:38.796050+00:00",
+      "command": "+CR,TILTVALUE=5;",
+      "command_hex": "2b43522c54494c5456414c55453d353b",
+      "events": [
+        {
+          "received_at_utc": "2026-03-06T15:18:38.195892+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;",
+            "utf8": "+OK;",
+            "errors": []
+          }
+        }
+      ]
+    },
+    "polling": [
+      {
+        "at_utc": "2026-03-06T15:18:40.973529+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:18:39.558804+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:38.946459+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:18:40.973513+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:40.433363+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:18:44.213728+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:18:42.593493+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:42.054014+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:18:44.213715+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:43.673440+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:18:47.453824+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:18:45.833471+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:45.293996+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:18:47.453812+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:46.913599+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:18:50.693677+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:18:49.073793+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:48.534125+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:18:50.693664+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:50.153809+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:18:53.933773+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:18:52.313850+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:51.774381+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:18:53.933762+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:53.393912+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:18:57.174018+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:18:55.554006+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:55.014263+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:18:57.174004+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:56.633790+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:19:00.413994+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:18:58.794185+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:58.254288+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:19:00.413982+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:18:59.874005+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:19:03.744111+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:19:02.124025+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:01.584356+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:19:03.744098+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:03.204003+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:19:06.984400+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:19:05.364265+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:04.824263+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:19:06.984376+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:06.443984+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:19:10.224195+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:19:08.604770+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:08.064707+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:19:10.224183+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:09.683975+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:19:13.464229+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:19:11.844305+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:11.304484+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:19:13.464185+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:12.924018+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "at_utc": "2026-03-06T15:19:16.794956+00:00",
+        "tilt": {
+          "sent_at_utc": "2026-03-06T15:19:15.084269+00:00",
+          "command": "+QR,TILTANGLE;",
+          "command_hex": "2b51522c54494c54414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:14.544668+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+                "ascii": "+DATA=-30.0,30.0,0.3;",
+                "utf8": "+DATA=-30.0,30.0,0.3;",
+                "errors": []
+              }
+            }
+          ]
+        },
+        "rotate": {
+          "sent_at_utc": "2026-03-06T15:19:16.794945+00:00",
+          "command": "+QT,TURNANGLE;",
+          "command_hex": "2b51542c5455524e414e474c453b",
+          "events": [
+            {
+              "received_at_utc": "2026-03-06T15:19:16.254143+00:00",
+              "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+              "payload": {
+                "hex": "2b444154413d302c3336302c312e303b",
+                "ascii": "+DATA=0,360,1.0;",
+                "utf8": "+DATA=0,360,1.0;",
+                "errors": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "errors": []
+  }
+}

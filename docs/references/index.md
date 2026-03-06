@@ -35,7 +35,7 @@ x.y.z
 
 | # | Файл | Технология | Описание |
 |---|---|---|---|
-| — | *Пока пусто. Записи появятся при добавлении стека.* | — | — |
+| 1 | `docs/references/revopoint-dual-axis-turntable.md` | Revopoint Dual-axis Turntable (BLE) | Профиль устройства, лимиты осей, lifecycle confidence и правила движения для будущего драйвера/agent tools |
 
 ---
 

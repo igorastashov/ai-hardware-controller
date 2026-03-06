@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T12:39:07.699456+00:00",
+  "tool": "scripts/turntable_discover.py",
+  "scan_seconds": 6.0,
+  "config_snapshot": {
+    "ble_timing": {
+      "command_gap_seconds": 0.1,
+      "connect_timeout_seconds": 15.0,
+      "discovery_scan_seconds": 8.0
+    },
+    "target_name_hint": "REVO_DUAL_AXIS_TABLE"
+  },
+  "result": {
+    "target_found": true,
+    "target": {
+      "address": "D3:36:39:34:5D:29",
+      "name": "REVO_DUAL_AXIS_TABLE",
+      "rssi": null,
+      "details": "RawAdvData(adv=<winrt._winrt_windows_devices_bluetooth_advertisement.BluetoothLEAdvertisementReceivedEventArgs object at 0x0000024B63940810>, scan=None)",
+      "metadata": {}
+    },
+    "scan": [
+      {
+        "address": "D3:36:39:34:5D:29",
+        "name": "REVO_DUAL_AXIS_TABLE",
+        "rssi": null,
+        "details": "RawAdvData(adv=<winrt._winrt_windows_devices_bluetooth_advertisement.BluetoothLEAdvertisementReceivedEventArgs object at 0x0000024B63940810>, scan=None)",
+        "metadata": {}
+      }
+    ],
+    "gatt": {
+      "connected": true,
+      "services": [
+        {
+          "handle": 1,
+          "uuid": "00001800-0000-1000-8000-00805f9b34fb",
+          "description": "Generic Access Profile",
+          "characteristics": [
+            {
+              "handle": 2,
+              "uuid": "00002a00-0000-1000-8000-00805f9b34fb",
+              "description": "Device Name",
+              "properties": [
+                "read",
+                "write"
+              ],
+              "descriptors": []
+            },
+            {
+              "handle": 4,
+              "uuid": "00002a01-0000-1000-8000-00805f9b34fb",
+              "description": "Appearance",
+              "properties": [
+                "read",
+                "write"
+              ],
+              "descriptors": []
+            },
+            {
+              "handle": 6,
+              "uuid": "00002a04-0000-1000-8000-00805f9b34fb",
+              "description": "Peripheral Preferred Connection Parameters",
+              "properties": [
+                "read"
+              ],
+              "descriptors": []
+            },
+            {
+              "handle": 8,
+              "uuid": "00002ac9-0000-1000-8000-00805f9b34fb",
+              "description": "Resolvable Private Address Only",
+              "properties": [
+                "read"
+              ],
+              "descriptors": []
+            }
+          ]
+        },
+        {
+          "handle": 10,
+          "uuid": "00001801-0000-1000-8000-00805f9b34fb",
+          "description": "Generic Attribute Profile",
+          "characteristics": [
+            {
+              "handle": 11,
+              "uuid": "00002a05-0000-1000-8000-00805f9b34fb",
+              "description": "Service Changed",
+              "properties": [
+                "indicate",
+                "read"
+              ],
+              "descriptors": [
+                {
+                  "handle": 13,
+                  "uuid": "00002902-0000-1000-8000-00805f9b34fb",
+                  "description": "Client Characteristic Configuration"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "handle": 14,
+          "uuid": "0000ffe0-0000-1000-8000-00805f9b34fb",
+          "description": "Vendor specific",
+          "characteristics": [
+            {
+              "handle": 15,
+              "uuid": "0000ffe1-0000-1000-8000-00805f9b34fb",
+              "description": "Vendor specific",
+              "properties": [
+                "notify",
+                "read",
+                "write-without-response"
+              ],
+              "descriptors": [
+                {
+                  "handle": 17,
+                  "uuid": "00002902-0000-1000-8000-00805f9b34fb",
+                  "description": "Client Characteristic Configuration"
+                },
+                {
+                  "handle": 18,
+                  "uuid": "00002901-0000-1000-8000-00805f9b34fb",
+                  "description": "Characteristic User Description"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "handle": 19,
+          "uuid": "02f00000-0000-0000-0000-00000000fe00",
+          "description": "Unknown",
+          "characteristics": [
+            {
+              "handle": 20,
+              "uuid": "02f00000-0000-0000-0000-00000000ff03",
+              "description": "Unknown",
+              "properties": [
+                "read"
+              ],
+              "descriptors": []
+            },
+            {
+              "handle": 22,
+              "uuid": "02f00000-0000-0000-0000-00000000ff02",
+              "description": "Unknown",
+              "properties": [
+                "notify",
+                "read"
+              ],
+              "descriptors": [
+                {
+                  "handle": 24,
+                  "uuid": "00002902-0000-1000-8000-00805f9b34fb",
+                  "description": "Client Characteristic Configuration"
+                },
+                {
+                  "handle": 25,
+                  "uuid": "00002901-0000-1000-8000-00805f9b34fb",
+                  "description": "Characteristic User Description"
+                }
+              ]
+            },
+            {
+              "handle": 26,
+              "uuid": "02f00000-0000-0000-0000-00000000ff00",
+              "description": "Unknown",
+              "properties": [
+                "read"
+              ],
+              "descriptors": []
+            },
+            {
+              "handle": 28,
+              "uuid": "02f00000-0000-0000-0000-00000000ff01",
+              "description": "Unknown",
+              "properties": [
+                "write",
+                "write-without-response"
+              ],
+              "descriptors": []
+            }
+          ]
+        }
+      ]
+    },
+    "errors": []
+  }
+}

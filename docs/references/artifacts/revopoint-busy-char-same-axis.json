@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T15:25:43.265118+00:00",
+  "tool": "scripts/turntable_busy_characterize.py",
+  "target": {
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "config": {
+    "command_1": "+CT,TURNANGLE=20;",
+    "command_2": "+CT,TURNANGLE=-20;",
+    "gap_seconds": 0.1,
+    "listen_seconds": 8.0
+  },
+  "result": {
+    "connected": true,
+    "sent_events": [
+      {
+        "at_utc": "2026-03-06T15:25:57.936623+00:00",
+        "command": "+CT,TURNANGLE=20;",
+        "hex": "2b43542c5455524e414e474c453d32303b"
+      },
+      {
+        "at_utc": "2026-03-06T15:25:58.052107+00:00",
+        "command": "+CT,TURNANGLE=-20;",
+        "hex": "2b43542c5455524e414e474c453d2d32303b"
+      },
+      {
+        "at_utc": "2026-03-06T15:26:06.058637+00:00",
+        "command": "+CT,STOP;",
+        "hex": "2b43542c53544f503b"
+      },
+      {
+        "at_utc": "2026-03-06T15:26:06.166278+00:00",
+        "command": "+CR,STOP;",
+        "hex": "2b43522c53544f503b"
+      }
+    ],
+    "notifications": [
+      {
+        "received_at_utc": "2026-03-06T15:25:57.958720+00:00",
+        "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+        "payload": {
+          "hex": "2b4f4b3b",
+          "ascii": "+OK;",
+          "utf8": "+OK;",
+          "errors": []
+        }
+      },
+      {
+        "received_at_utc": "2026-03-06T15:25:58.071552+00:00",
+        "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+        "payload": {
+          "hex": "2b4f4b3b",
+          "ascii": "+OK;",
+          "utf8": "+OK;",
+          "errors": []
+        }
+      },
+      {
+        "received_at_utc": "2026-03-06T15:26:06.576945+00:00",
+        "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+        "payload": {
+          "hex": "2b4f4b3b",
+          "ascii": "+OK;",
+          "utf8": "+OK;",
+          "errors": []
+        }
+      },
+      {
+        "received_at_utc": "2026-03-06T15:26:06.577062+00:00",
+        "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+        "payload": {
+          "hex": "2b4f4b3b",
+          "ascii": "+OK;",
+          "utf8": "+OK;",
+          "errors": []
+        }
+      }
+    ],
+    "errors": []
+  }
+}

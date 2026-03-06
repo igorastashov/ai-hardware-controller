@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T14:41:09.972778+00:00",
+  "tool": "scripts/turntable_protocol_probe.py",
+  "target": {
+    "name_hint": "REVO_DUAL_AXIS_TABLE",
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "probe_config": {
+    "command_string": "+QR,TILTANGLE;",
+    "encoding": "ascii",
+    "append_crlf": false,
+    "wait_seconds": 3.0,
+    "command_hex": "2b51522c54494c54414e474c453b"
+  },
+  "result": {
+    "connected": true,
+    "write_sent": true,
+    "notifications_count": 1,
+    "notifications": [
+      {
+        "received_at_utc": "2026-03-06T14:41:13.265477+00:00",
+        "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+        "payload": {
+          "hex": "2b444154413d2d33302e302c33302e302c302e333b",
+          "ascii": "+DATA=-30.0,30.0,0.3;",
+          "utf8": "+DATA=-30.0,30.0,0.3;",
+          "errors": []
+        }
+      }
+    ],
+    "errors": []
+  }
+}
