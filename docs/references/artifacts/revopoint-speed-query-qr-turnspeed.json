@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T16:11:14.539482+00:00",
+  "tool": "scripts/turntable_protocol_probe.py",
+  "target": {
+    "name_hint": "REVO_DUAL_AXIS_TABLE",
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "probe_config": {
+    "command_string": "+QR,TURNSPEED;",
+    "encoding": "ascii",
+    "append_crlf": false,
+    "wait_seconds": 2.0,
+    "command_hex": "2b51522c5455524e53504545443b"
+  },
+  "result": {
+    "connected": true,
+    "write_sent": false,
+    "notifications_count": 0,
+    "notifications": [],
+    "errors": [
+      {
+        "stage": "probe",
+        "error_type": "OSError",
+        "message": "[WinError -2147023673] \u041e\u043f\u0435\u0440\u0430\u0446\u0438\u044f \u0431\u044b\u043b\u0430 \u043e\u0442\u043c\u0435\u043d\u0435\u043d\u0430 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u0435\u043c."
+      }
+    ]
+  }
+}

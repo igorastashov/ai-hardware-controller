@@ -72,6 +72,7 @@ async def _run() -> dict[str, Any]:
 
     home = await adapter.turntable_home()
     move = await adapter.turntable_move_to(rotation_deg=350.0, tilt_deg=5.0)
+    return_base = await adapter.turntable_return_base()
     state = await adapter.turntable_state()
     stop = await adapter.turntable_stop()
     invalid_tilt = await adapter.turntable_move_to(rotation_deg=0.0, tilt_deg=100.0)
@@ -79,6 +80,7 @@ async def _run() -> dict[str, Any]:
     checks = {
         "home_ok": home.get("ok") is True,
         "move_ok": move.get("ok") is True,
+        "return_base_ok": return_base.get("ok") is True,
         "state_ok": state.get("ok") is True,
         "stop_ok": stop.get("ok") is True,
         "invalid_tilt_rejected": invalid_tilt.get("ok") is False
@@ -92,6 +94,7 @@ async def _run() -> dict[str, Any]:
         "samples": {
             "home": home,
             "move": move,
+            "return_base": return_base,
             "state": state,
             "stop": stop,
             "invalid_tilt": invalid_tilt,

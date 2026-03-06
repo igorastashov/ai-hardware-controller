@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T16:16:52.959032+00:00",
+  "tool": "scripts/turntable_protocol_probe.py",
+  "target": {
+    "name_hint": "REVO_DUAL_AXIS_TABLE",
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "probe_config": {
+    "command_string": "+CT,TILTSPEED=20;",
+    "encoding": "ascii",
+    "append_crlf": false,
+    "wait_seconds": 2.0,
+    "command_hex": "2b43542c54494c5453504545443d32303b"
+  },
+  "result": {
+    "connected": true,
+    "write_sent": false,
+    "notifications_count": 0,
+    "notifications": [],
+    "errors": [
+      {
+        "stage": "probe",
+        "error_type": "BleakCharacteristicNotFoundError",
+        "message": "Characteristic 0000ffe1-0000-1000-8000-00805f9b34fb was not found!"
+      }
+    ]
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T16:08:43.622770+00:00",
+  "tool": "scripts/turntable_speed_decode_probe.py",
+  "target": {
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "config": {
+    "axis": "tilt",
+    "values": [
+      "1",
+      "2",
+      "3",
+      "5",
+      "7",
+      "10",
+      "15"
+    ]
+  },
+  "results": [
+    {
+      "value": "1",
+      "command": "+CR,TILTSPEED=1;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:08:44.263391+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "2",
+      "command": "+CR,TILTSPEED=2;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:08:44.437956+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "3",
+      "command": "+CR,TILTSPEED=3;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:08:44.612934+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "5",
+      "command": "+CR,TILTSPEED=5;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:08:44.787998+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "7",
+      "command": "+CR,TILTSPEED=7;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:08:44.975454+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "10",
+      "command": "+CR,TILTSPEED=10;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:08:45.162866+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "15",
+      "command": "+CR,TILTSPEED=15;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:08:45.350143+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "accepted_values": [],
+    "rejected_values": [
+      "1",
+      "2",
+      "3",
+      "5",
+      "7",
+      "10",
+      "15"
+    ],
+    "timeouts": []
+  },
+  "errors": []
+}

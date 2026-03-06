@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T17:10:06.672913+00:00",
+  "tool": "scripts/turntable_dual_axis_probe.py",
+  "config": {
+    "rotate_speed": 18.0,
+    "tilt_speed": 40.0,
+    "rotate_angle": 120.0,
+    "tilt_target": 20.0,
+    "gap_seconds": 0.05,
+    "observe_seconds": 12.0
+  },
+  "timeline": [
+    {
+      "index": 0,
+      "command": "+CT,TURNSPEED=18.0;",
+      "sent_at_utc": "2026-03-06T17:10:08.476620+00:00"
+    },
+    {
+      "index": 1,
+      "command": "+CR,TILTSPEED=40.0;",
+      "sent_at_utc": "2026-03-06T17:10:08.532156+00:00"
+    },
+    {
+      "index": 2,
+      "command": "+CT,TURNANGLE=120.0;",
+      "sent_at_utc": "2026-03-06T17:10:08.595707+00:00"
+    },
+    {
+      "index": 3,
+      "command": "+CR,TILTVALUE=20.0;",
+      "sent_at_utc": "2026-03-06T17:10:08.658213+00:00"
+    },
+    {
+      "command": "+CT,STOP;",
+      "sent_at_utc": "2026-03-06T17:10:20.728699+00:00"
+    },
+    {
+      "command": "+CR,STOP;",
+      "sent_at_utc": "2026-03-06T17:10:20.836545+00:00"
+    }
+  ],
+  "notifications": [
+    {
+      "at_utc": "2026-03-06T17:10:08.524076+00:00",
+      "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+      "payload": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;"
+      }
+    },
+    {
+      "at_utc": "2026-03-06T17:10:08.573571+00:00",
+      "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+      "payload": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;"
+      }
+    },
+    {
+      "at_utc": "2026-03-06T17:10:08.611101+00:00",
+      "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+      "payload": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;"
+      }
+    },
+    {
+      "at_utc": "2026-03-06T17:10:08.686148+00:00",
+      "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+      "payload": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;"
+      }
+    },
+    {
+      "at_utc": "2026-03-06T17:10:21.136566+00:00",
+      "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+      "payload": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;"
+      }
+    },
+    {
+      "at_utc": "2026-03-06T17:10:21.137015+00:00",
+      "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+      "payload": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;"
+      }
+    }
+  ],
+  "errors": []
+}

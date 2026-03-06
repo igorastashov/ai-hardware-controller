@@ -36,6 +36,11 @@ x.y.z
 | # | Файл | Технология | Описание |
 |---|---|---|---|
 | 1 | `docs/references/revopoint-dual-axis-turntable.md` | Revopoint Dual-axis Turntable (BLE) | Профиль устройства, лимиты осей, lifecycle confidence и правила движения для будущего драйвера/agent tools |
+| 2 | `docs/references/turntable-tool-cli-runbook.md` | Turntable Tool CLI | Пошаговый операторский runbook для ручек `state/home/move-to/stop` |
+| 3 | `docs/references/openclaw-turntable-agent-instruction.md` | OpenClaw Agent Guidance | Инструкция агенту по безопасному циклу вызова turntable-ручек и обработке ошибок |
+| 4 | `docs/references/openclaw-turntable-tool-contract.md` | OpenClaw Tool Contract | Формальный перечень ручек, ограничений, ошибок и политики вызовов |
+| 5 | `docs/references/openclaw-turntable-test-plan.md` | OpenClaw Test Plan | План тестирования инфраструктуры ручек, probe-проверок и критериев приемки |
+| 6 | `docs/references/openclaw-turntable-future-agent-work.md` | OpenClaw Agent Backlog | Бэклог задач будущего агента для финальной интеграции и эксплуатации |
 
 ---
 

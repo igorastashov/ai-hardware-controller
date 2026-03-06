@@ -42,6 +42,7 @@
 | **Возвращает** | Exit code 0 + JSON отчёт с результатом записи, количеством notify и декодированием payload |
 | **Когда вызывать** | Перед реализацией runtime parser/ACK модели и подтверждением `state_confidence=HIGH` |
 | **Пример вызова** | `python scripts/turntable_protocol_probe.py --target-address D3:36:39:34:5D:29` |
+| **Примечание** | Скрипт использует retry connect для transient BLE проблем |
 
 ### `turntable_motion_characterize.py` — Проверка телеметрии вокруг движения
 
@@ -92,6 +93,58 @@
 | **Возвращает** | Exit code 0 при успешных smoke-checks, 1 при провале |
 | **Когда вызывать** | После изменений в `turntable_tool_adapter.py` |
 | **Пример вызова** | `python scripts/turntable_tool_adapter_smoke.py` |
+
+### `turntable_tool_adapter_contract_test.py` — Контрактные тесты ручек
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Проверяет схему ответов, busy/validation политику, return-base и shortest-path логику без реального BLE |
+| **Аргументы** | Нет |
+| **Возвращает** | Exit code 0 при прохождении всех контрактных проверок |
+| **Когда вызывать** | После изменений в runtime/adapter/CLI контракте |
+| **Пример вызова** | `python scripts/turntable_tool_adapter_contract_test.py` |
+
+### `turntable_timing_probe.py` — Калибровка timing-модели движения
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Выполняет матрицу `speed + move` и сохраняет временную ленту ACK/notify для калибровки completion-модели |
+| **Аргументы** | `--target-address`, `--axis`, `--speed-values`, `--move-value`, `--settle-seconds`, `--output` |
+| **Возвращает** | JSON-артефакт с run-by-run событиями и шаблоном для ручных наблюдений |
+| **Когда вызывать** | Перед финализацией timing-based completion в runtime |
+| **Пример вызова** | `python scripts/turntable_timing_probe.py --target-address D3:36:39:34:5D:29 --axis rotate --speed-values 8,12,20 --move-value 30 --output docs/references/artifacts/timing-rotate.json` |
+| **Примечание** | Скрипт использует retry connect и завершает с safety stop |
+
+### `turntable_speed_decode_probe.py` — Декодирование валидных speed-команд
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Проверяет матрицу значений speed-команд и фиксирует accepted/rejected/timeout по каждой оси |
+| **Аргументы** | `--target-address`, `--axis`, `--values`, `--output` |
+| **Возвращает** | JSON-артефакт с полным ответом и сводкой по валидным значениям |
+| **Когда вызывать** | Перед использованием speed-параметров в timing completion модели |
+| **Пример вызова** | `python scripts/turntable_speed_decode_probe.py --target-address D3:36:39:34:5D:29 --axis rotate --values 1,2,4,8,12,20 --output docs/references/artifacts/speed-rotate.json` |
+| **Примечание** | Скрипт использует retry connect и добавляет safety stop в конце |
+
+### `turntable_dual_axis_probe.py` — Проверка квази-одновременного rotate+tilt
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Отправляет speed+move для двух осей с минимальным gap и фиксирует timeline/notify для оценки concurrency-реакции |
+| **Аргументы** | `--target-address`, `--rotate-speed`, `--tilt-speed`, `--rotate-angle`, `--tilt-target`, `--gap-seconds`, `--observe-seconds`, `--output` |
+| **Возвращает** | JSON-артефакт с timeline отправки и notify-событиями |
+| **Когда вызывать** | При валидации сценариев одновременной работы осей и оценки command-level латентности |
+| **Пример вызова** | `python scripts/turntable_dual_axis_probe.py --target-address D3:36:39:34:5D:29 --rotate-speed 18 --tilt-speed 40 --rotate-angle 120 --tilt-target 20 --output docs/references/artifacts/dual-axis-probe.json` |
+
+### `turntable_tool_cli.py` — CLI для будущих agent-ручек
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Вызывает `state/home/move-to/stop` через адаптер, печатает JSON-результат |
+| **Аргументы** | Глобальный `--address`, команды: `state`, `home`, `return-base`, `stop`, `move-to --rotation-deg --tilt-deg [--rotate-speed --tilt-speed]` |
+| **Возвращает** | Exit code 0 на успешный `ok=true`, иначе 1 |
+| **Когда вызывать** | Для ручной проверки контракта tool-слоя перед интеграцией в OpenClaw |
+| **Пример вызова** | `python scripts/turntable_tool_cli.py --address D3:36:39:34:5D:29 move-to --rotation-deg 30 --tilt-deg 10 --rotate-speed 18 --tilt-speed 40` |
 
 ---
 

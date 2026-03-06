@@ -33,6 +33,7 @@ class VirtualPose:
     rotation_deg: float
     tilt_deg: float
     zero_calibrated: bool
+    reference_frame: str
 
 
 class TurntableToolAdapter:
@@ -44,7 +45,12 @@ class TurntableToolAdapter:
         runtime: TurntableRuntimeSingleFlight | None = None,
     ) -> None:
         self._runtime = runtime if runtime is not None else TurntableRuntimeSingleFlight(address)
-        self._pose = VirtualPose(rotation_deg=0.0, tilt_deg=0.0, zero_calibrated=False)
+        self._pose = VirtualPose(
+            rotation_deg=0.0,
+            tilt_deg=0.0,
+            zero_calibrated=False,
+            reference_frame="power_on_zero",
+        )
         self._action_lock = asyncio.Lock()
 
     async def connect(self) -> dict[str, Any]:
@@ -70,6 +76,7 @@ class TurntableToolAdapter:
                 "status": state.status.value,
                 "ble_connected": state.ble_connected,
                 "zero_calibrated": self._pose.zero_calibrated,
+                "reference_frame": self._pose.reference_frame,
                 "last_error_code": state.last_error_code,
                 "last_error_message": state.last_error_message,
             }
@@ -80,17 +87,27 @@ class TurntableToolAdapter:
             return self._error("DEVICE_BUSY", "Device is busy.", 409)
 
         async with self._action_lock:
-            self._pose = VirtualPose(rotation_deg=0.0, tilt_deg=0.0, zero_calibrated=True)
+            self._pose = VirtualPose(
+                rotation_deg=0.0,
+                tilt_deg=0.0,
+                zero_calibrated=True,
+                reference_frame="software_zero",
+            )
             return self._ok(
                 {
                     "rotation_deg": 0.0,
                     "tilt_deg": 0.0,
                     "zero_calibrated": True,
+                    "reference_frame": self._pose.reference_frame,
                 }
             )
 
     async def turntable_move_to(
-        self, rotation_deg: float, tilt_deg: float
+        self,
+        rotation_deg: float,
+        tilt_deg: float,
+        rotate_speed_value: float | None = None,
+        tilt_speed_value: float | None = None,
     ) -> dict[str, Any]:
         if self._action_lock.locked():
             return self._error("DEVICE_BUSY", "Device is busy.", 409)
@@ -105,11 +122,31 @@ class TurntableToolAdapter:
         async with self._action_lock:
             executed: list[dict[str, Any]] = []
             try:
+                if rotate_speed_value is not None:
+                    frame = await self._runtime.set_rotate_speed(rotate_speed_value)
+                    executed.append(
+                        {
+                            "axis": "rotate_speed",
+                            "value": rotate_speed_value,
+                            "ack": frame.raw,
+                        }
+                    )
+
                 rotate_delta = _shortest_delta_deg(self._pose.rotation_deg, rotation_deg)
                 if abs(rotate_delta) > 0.001:
                     frame = await self._runtime.move_rotate_by(rotate_delta)
                     executed.append({"axis": "rotate", "delta_deg": rotate_delta, "ack": frame.raw})
                     self._pose.rotation_deg = _normalize_deg_360(self._pose.rotation_deg + rotate_delta)
+
+                if tilt_speed_value is not None:
+                    frame = await self._runtime.set_tilt_speed(tilt_speed_value)
+                    executed.append(
+                        {
+                            "axis": "tilt_speed",
+                            "value": tilt_speed_value,
+                            "ack": frame.raw,
+                        }
+                    )
 
                 if abs(tilt_deg - self._pose.tilt_deg) > 0.001:
                     frame = await self._runtime.move_tilt_to(tilt_deg)
@@ -122,10 +159,13 @@ class TurntableToolAdapter:
                         "rotation_deg": _normalize_deg_360(self._pose.rotation_deg),
                         "tilt_deg": self._pose.tilt_deg,
                         "zero_calibrated": self._pose.zero_calibrated,
+                        "reference_frame": self._pose.reference_frame,
                     }
                 )
             except BusyError:
                 return self._error("DEVICE_BUSY", "Device is busy.", 409)
+            except ValueError as exc:
+                return self._error("VALIDATION_ERROR", str(exc), 422)
             except Exception as exc:  # noqa: BLE001
                 return self._error("MOVE_FAILED", str(exc), 500)
 
@@ -140,6 +180,67 @@ class TurntableToolAdapter:
             )
         except Exception as exc:  # noqa: BLE001
             return self._error("STOP_FAILED", str(exc), 500)
+
+    async def turntable_return_base(self) -> dict[str, Any]:
+        """Return table to base 0 depending on available reference frame."""
+        if self._action_lock.locked():
+            return self._error("DEVICE_BUSY", "Device is busy.", 409)
+
+        async with self._action_lock:
+            executed: list[dict[str, Any]] = []
+            try:
+                if self._pose.zero_calibrated:
+                    # Software zero is trusted for this session.
+                    rotate_delta = _shortest_delta_deg(self._pose.rotation_deg, 0.0)
+                    if abs(rotate_delta) > 0.001:
+                        frame = await self._runtime.move_rotate_by(rotate_delta)
+                        executed.append(
+                            {"axis": "rotate", "delta_deg": rotate_delta, "ack": frame.raw}
+                        )
+                        self._pose.rotation_deg = _normalize_deg_360(
+                            self._pose.rotation_deg + rotate_delta
+                        )
+
+                    if abs(self._pose.tilt_deg) > 0.001:
+                        frame = await self._runtime.move_tilt_to(0.0)
+                        executed.append({"axis": "tilt", "target_deg": 0.0, "ack": frame.raw})
+                        self._pose.tilt_deg = 0.0
+
+                    return self._ok(
+                        {
+                            "mode": "software_zero",
+                            "executed": executed,
+                            "rotation_deg": _normalize_deg_360(self._pose.rotation_deg),
+                            "tilt_deg": self._pose.tilt_deg,
+                            "zero_calibrated": self._pose.zero_calibrated,
+                            "reference_frame": self._pose.reference_frame,
+                        }
+                    )
+
+                # Fallback: hardware power-on base for rotate + explicit tilt 0.
+                frame_rotate = await self._runtime.return_rotate_to_power_on_zero()
+                executed.append({"axis": "rotate", "command": "+CT,TOZERO;", "ack": frame_rotate.raw})
+                self._pose.rotation_deg = 0.0
+
+                frame_tilt = await self._runtime.move_tilt_to(0.0)
+                executed.append({"axis": "tilt", "command": "+CR,TILTVALUE=0;", "ack": frame_tilt.raw})
+                self._pose.tilt_deg = 0.0
+                self._pose.reference_frame = "power_on_zero"
+
+                return self._ok(
+                    {
+                        "mode": "power_on_zero",
+                        "executed": executed,
+                        "rotation_deg": self._pose.rotation_deg,
+                        "tilt_deg": self._pose.tilt_deg,
+                        "zero_calibrated": self._pose.zero_calibrated,
+                        "reference_frame": self._pose.reference_frame,
+                    }
+                )
+            except BusyError:
+                return self._error("DEVICE_BUSY", "Device is busy.", 409)
+            except Exception as exc:  # noqa: BLE001
+                return self._error("RETURN_BASE_FAILED", str(exc), 500)
 
     @staticmethod
     def _ok(result: dict[str, Any]) -> dict[str, Any]:

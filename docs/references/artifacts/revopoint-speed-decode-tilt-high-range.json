@@ -1,0 +1,216 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T16:17:44.724769+00:00",
+  "tool": "scripts/turntable_speed_decode_probe.py",
+  "target": {
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "config": {
+    "axis": "tilt",
+    "values": [
+      "20",
+      "30",
+      "40",
+      "50",
+      "60",
+      "70",
+      "80",
+      "90"
+    ]
+  },
+  "results": [
+    {
+      "value": "20",
+      "command": "+CR,TILTSPEED=20;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:45.366553+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "30",
+      "command": "+CR,TILTSPEED=30;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:45.541042+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "40",
+      "command": "+CR,TILTSPEED=40;",
+      "first_response": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;",
+        "accepted": true,
+        "error_code": null
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:45.740696+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;",
+            "accepted": true,
+            "error_code": null
+          }
+        }
+      ]
+    },
+    {
+      "value": "50",
+      "command": "+CR,TILTSPEED=50;",
+      "first_response": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;",
+        "accepted": true,
+        "error_code": null
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:45.941068+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;",
+            "accepted": true,
+            "error_code": null
+          }
+        }
+      ]
+    },
+    {
+      "value": "60",
+      "command": "+CR,TILTSPEED=60;",
+      "first_response": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;",
+        "accepted": true,
+        "error_code": null
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:46.141260+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;",
+            "accepted": true,
+            "error_code": null
+          }
+        }
+      ]
+    },
+    {
+      "value": "70",
+      "command": "+CR,TILTSPEED=70;",
+      "first_response": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;",
+        "accepted": true,
+        "error_code": null
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:46.340903+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;",
+            "accepted": true,
+            "error_code": null
+          }
+        }
+      ]
+    },
+    {
+      "value": "80",
+      "command": "+CR,TILTSPEED=80;",
+      "first_response": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;",
+        "accepted": true,
+        "error_code": null
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:46.553762+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;",
+            "accepted": true,
+            "error_code": null
+          }
+        }
+      ]
+    },
+    {
+      "value": "90",
+      "command": "+CR,TILTSPEED=90;",
+      "first_response": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;",
+        "accepted": true,
+        "error_code": null
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:46.753379+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;",
+            "accepted": true,
+            "error_code": null
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "accepted_values": [
+      "40",
+      "50",
+      "60",
+      "70",
+      "80",
+      "90"
+    ],
+    "rejected_values": [
+      "20",
+      "30"
+    ],
+    "timeouts": []
+  },
+  "errors": []
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T16:22:29.574777+00:00",
+  "tool": "scripts/turntable_timing_probe.py",
+  "target": {
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "config": {
+    "axis": "tilt",
+    "speed_values": [
+      "40",
+      "60",
+      "90"
+    ],
+    "move_value": "20",
+    "settle_seconds": 10.0
+  },
+  "runs": [
+    {
+      "run_index": 0,
+      "started_at_utc": "2026-03-06T16:22:31.025016+00:00",
+      "speed_command": "+CR,TILTSPEED=40;",
+      "move_command": "+CR,TILTVALUE=20;",
+      "notifications": [
+        {
+          "received_at_utc": "2026-03-06T16:22:31.087613+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        },
+        {
+          "received_at_utc": "2026-03-06T16:22:31.161730+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        }
+      ]
+    },
+    {
+      "run_index": 1,
+      "started_at_utc": "2026-03-06T16:22:41.148012+00:00",
+      "speed_command": "+CR,TILTSPEED=60;",
+      "move_command": "+CR,TILTVALUE=20;",
+      "notifications": [
+        {
+          "received_at_utc": "2026-03-06T16:22:41.479386+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        },
+        {
+          "received_at_utc": "2026-03-06T16:22:41.479956+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        }
+      ]
+    },
+    {
+      "run_index": 2,
+      "started_at_utc": "2026-03-06T16:22:51.265938+00:00",
+      "speed_command": "+CR,TILTSPEED=90;",
+      "move_command": "+CR,TILTVALUE=20;",
+      "notifications": [
+        {
+          "received_at_utc": "2026-03-06T16:22:51.561429+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        },
+        {
+          "received_at_utc": "2026-03-06T16:22:51.561999+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        }
+      ]
+    }
+  ],
+  "manual_observations_template": {
+    "instruction": "Fill by human observation for each run_index",
+    "fields": [
+      "run_index",
+      "observed_start_delay_s",
+      "observed_end_time_s",
+      "notes"
+    ],
+    "entries": []
+  },
+  "errors": []
+}

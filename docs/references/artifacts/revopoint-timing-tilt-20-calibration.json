@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T16:21:39.347711+00:00",
+  "tool": "scripts/turntable_timing_probe.py",
+  "target": {
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "config": {
+    "axis": "tilt",
+    "speed_values": [
+      "40",
+      "60",
+      "90"
+    ],
+    "move_value": "20",
+    "settle_seconds": 10.0
+  },
+  "runs": [],
+  "manual_observations_template": {
+    "instruction": "Fill by human observation for each run_index",
+    "fields": [
+      "run_index",
+      "observed_start_delay_s",
+      "observed_end_time_s",
+      "notes"
+    ],
+    "entries": []
+  },
+  "errors": [
+    {
+      "error_type": "BleakDeviceNotFoundError",
+      "message": "Device with address D3:36:39:34:5D:29 was not found."
+    }
+  ]
+}

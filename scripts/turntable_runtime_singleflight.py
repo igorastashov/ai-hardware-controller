@@ -20,6 +20,7 @@ from turntable_config import (
     AXIS_LIMITS,
     BLE_TIMING,
     MOTION_TIMING,
+    SPEED_BOUNDS,
     TURNTABLE_PRIMARY_CHAR_UUID,
     TURNTABLE_PROTOCOL_QUERY_ROTATE_ANGLE,
     TURNTABLE_PROTOCOL_QUERY_TILT_ANGLE,
@@ -74,11 +75,17 @@ def estimate_motion_duration_seconds(command: str) -> float:
     """Estimate command completion time using current coarse timing model."""
     if command.startswith("+CT,TURNANGLE=") and command.endswith(";"):
         delta = float(command[len("+CT,TURNANGLE=") : -1])
-        seconds = abs(delta) / MOTION_TIMING.default_rotate_deg_per_s
+        seconds = (
+            MOTION_TIMING.rotate_start_delay_seconds
+            + (abs(delta) / MOTION_TIMING.default_rotate_deg_per_s)
+        )
     elif command.startswith("+CR,TILTVALUE=") and command.endswith(";"):
         target = float(command[len("+CR,TILTVALUE=") : -1])
         # No reliable absolute live pose yet; use magnitude as conservative proxy.
-        seconds = abs(target) / MOTION_TIMING.default_tilt_deg_per_s
+        seconds = (
+            MOTION_TIMING.tilt_start_delay_seconds
+            + (abs(target) / MOTION_TIMING.default_tilt_deg_per_s)
+        )
     else:
         seconds = 0.0
 
@@ -109,7 +116,20 @@ class TurntableRuntimeSingleFlight:
         return self._state
 
     async def connect(self) -> None:
-        await self._client.connect()
+        last_error: Exception | None = None
+        for attempt in range(BLE_TIMING.connect_retry_attempts):
+            try:
+                await self._client.connect()
+                last_error = None
+                break
+            except Exception as exc:  # noqa: BLE001
+                last_error = exc
+                if attempt < BLE_TIMING.connect_retry_attempts - 1:
+                    await asyncio.sleep(BLE_TIMING.connect_retry_delay_seconds)
+
+        if last_error is not None and not self._client.is_connected:
+            raise last_error
+
         self._state = RuntimeState(
             status=RuntimeStatus.IDLE,
             ble_connected=self._client.is_connected,
@@ -137,11 +157,33 @@ class TurntableRuntimeSingleFlight:
         command = f"+CT,TURNANGLE={delta_deg};"
         return await self._run_motion(command)
 
+    async def set_rotate_speed(self, speed_value: float) -> ProtocolFrame:
+        if (
+            speed_value < SPEED_BOUNDS.rotate_min_observed_ok
+            or speed_value > SPEED_BOUNDS.rotate_max_observed_ok
+        ):
+            raise ValueError(
+                f"Rotate speed must be within "
+                f"[{SPEED_BOUNDS.rotate_min_observed_ok}, {SPEED_BOUNDS.rotate_max_observed_ok}]."
+            )
+        return await self._send_and_wait_frame(f"+CT,TURNSPEED={speed_value};", 0.8)
+
     async def move_tilt_to(self, target_deg: float) -> ProtocolFrame:
         if target_deg < AXIS_LIMITS.tilt_min_deg or target_deg > AXIS_LIMITS.tilt_max_deg:
             raise ValueError("Tilt target is outside configured limits.")
         command = f"+CR,TILTVALUE={target_deg};"
         return await self._run_motion(command)
+
+    async def set_tilt_speed(self, speed_value: float) -> ProtocolFrame:
+        if (
+            speed_value < SPEED_BOUNDS.tilt_min_observed_ok
+            or speed_value > SPEED_BOUNDS.tilt_max_observed_ok
+        ):
+            raise ValueError(
+                f"Tilt speed must be within "
+                f"[{SPEED_BOUNDS.tilt_min_observed_ok}, {SPEED_BOUNDS.tilt_max_observed_ok}]."
+            )
+        return await self._send_and_wait_frame(f"+CR,TILTSPEED={speed_value};", 0.8)
 
     async def emergency_stop(self) -> list[ProtocolFrame]:
         frames: list[ProtocolFrame] = []
@@ -156,6 +198,10 @@ class TurntableRuntimeSingleFlight:
             last_error_message=self._state.last_error_message,
         )
         return frames
+
+    async def return_rotate_to_power_on_zero(self) -> ProtocolFrame:
+        """Return rotate axis to device power-on zero."""
+        return await self._run_motion("+CT,TOZERO;")
 
     async def _run_motion(self, command: str) -> ProtocolFrame:
         if self._motion_lock.locked():

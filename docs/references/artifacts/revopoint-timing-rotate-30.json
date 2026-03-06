@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T15:54:33.052280+00:00",
+  "tool": "scripts/turntable_timing_probe.py",
+  "target": {
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "config": {
+    "axis": "rotate",
+    "speed_values": [
+      "8",
+      "12",
+      "20"
+    ],
+    "move_value": "30",
+    "settle_seconds": 6.0
+  },
+  "runs": [
+    {
+      "run_index": 0,
+      "started_at_utc": "2026-03-06T15:54:34.050082+00:00",
+      "speed_command": "+CT,TURNSPEED=8;",
+      "move_command": "+CT,TURNANGLE=30;",
+      "notifications": [
+        {
+          "received_at_utc": "2026-03-06T15:54:34.074743+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030343b",
+            "ascii": "+FAIL,ERR=004;"
+          }
+        },
+        {
+          "received_at_utc": "2026-03-06T15:54:34.186625+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        }
+      ]
+    },
+    {
+      "run_index": 1,
+      "started_at_utc": "2026-03-06T15:54:40.180960+00:00",
+      "speed_command": "+CT,TURNSPEED=12;",
+      "move_command": "+CT,TURNANGLE=30;",
+      "notifications": [
+        {
+          "received_at_utc": "2026-03-06T15:54:40.499696+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030343b",
+            "ascii": "+FAIL,ERR=004;"
+          }
+        },
+        {
+          "received_at_utc": "2026-03-06T15:54:40.499725+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        }
+      ]
+    },
+    {
+      "run_index": 2,
+      "started_at_utc": "2026-03-06T15:54:46.294776+00:00",
+      "speed_command": "+CT,TURNSPEED=20;",
+      "move_command": "+CT,TURNANGLE=30;",
+      "notifications": [
+        {
+          "received_at_utc": "2026-03-06T15:54:46.889708+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        },
+        {
+          "received_at_utc": "2026-03-06T15:54:46.889989+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        },
+        {
+          "received_at_utc": "2026-03-06T15:54:46.890584+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;"
+          }
+        }
+      ]
+    }
+  ],
+  "manual_observations_template": {
+    "instruction": "Fill by human observation for each run_index",
+    "fields": [
+      "run_index",
+      "observed_start_delay_s",
+      "observed_end_time_s",
+      "notes"
+    ],
+    "entries": []
+  },
+  "errors": []
+}

@@ -35,6 +35,17 @@
 - [x] Шаг 14: Добавить runtime-черновик state machine с single-flight mutex и timing completion. (2026-03-06 17:00)
 - [x] Шаг 15: Добавить tool-адаптер с JSON-контрактом (`state/home/move_to/stop`) для будущей интеграции с агентом. (2026-03-06 17:00)
 - [x] Шаг 16: Добавить Product Spec (DoD) и smoke-harness для tool-адаптера. (2026-03-06 17:00)
+- [x] Шаг 17: Запустить timing probe на 2 осях и выявить поведение speed-команд. (2026-03-06 17:00)
+- [x] Шаг 18: Выполнить speed decode matrix и определить принятые/отклоненные диапазоны. (2026-03-06 17:00)
+- [x] Шаг 19: Уточнить speed protocol (query-команды + пороги по осям). (2026-03-06 17:00)
+- [x] Шаг 20: Запустить калибровочные прогоны по валидным speed-диапазонам (rotate/tilt). (2026-03-06 17:00)
+- [x] Шаг 21: Применить ручную калибровку времени (startup + deg/s) в runtime timing model. (2026-03-06 17:00)
+- [x] Шаг 22: Добавить speed validation в runtime/tool и retry connect для probe-скриптов. (2026-03-06 17:00)
+- [x] Шаг 23: Добавить tool CLI и проверить dual-axis near-simultaneous dispatch. (2026-03-06 17:00)
+- [x] Шаг 24: Добавить runbook/agent instruction и контракт ручек для OpenClaw. (2026-03-06 17:00)
+- [x] Шаг 25: Добавить стратегию возврата в базу 0 (`software_zero` / `power_on_zero`). (2026-03-06 17:00)
+- [x] Шаг 26: Финализировать тестовый план и backlog работ будущего агента. (2026-03-06 17:00)
+- [x] Шаг 24: Добавить runbook и инструкцию для OpenClaw-агента в references. (2026-03-06 17:00)
 
 > При выполнении шага: `- [x] Шаг 1: Описание. (YYYY-MM-DD HH:MM)`
 
@@ -88,6 +99,46 @@
   - **Контекст:** переход к интеграционному этапу и необходимость единых критериев готовности.
   - **Решение:** добавить product spec с приемочными критериями и smoke-проверку контрактного слоя.
   - **Harness Update:** `docs/product-specs/turntable-agent-goal.md`, `scripts/turntable_tool_adapter_smoke.py`.
+- **(2026-03-06 17:00) Сюрприз:** speed-команды в тестовых диапазонах дают `FAIL` (`ERR=004`/`ERR=007`), а команды движения при этом подтверждаются `OK`.
+  - **Контекст:** timing probe на rotate (`8,12,20`) и tilt (`3,5,7`).
+  - **Решение:** временно исключить speed-команды из completion-модели до декодирования валидных диапазонов/формата.
+  - **Harness Update:** `scripts/turntable_timing_probe.py`, артефакты `revopoint-timing-rotate-30.json`, `revopoint-timing-tilt-10.json`.
+- **(2026-03-06 17:00) Сюрприз:** rotate speed принимает только часть диапазона (`20`, `30`), tilt speed в протестированном наборе полностью отклоняется.
+  - **Контекст:** матричный probe значений speed-команд по двум осям.
+  - **Решение:** считать speed decode отдельно по осям; для tilt искать альтернативный командный ключ/формат.
+  - **Harness Update:** `scripts/turntable_speed_decode_probe.py`, артефакты `revopoint-speed-decode-rotate.json`, `revopoint-speed-decode-tilt.json`.
+- **(2026-03-06 17:00) Сюрприз:** speed-протокол асимметричен и имеет пороги принятия: rotate >=18, tilt >=40 (в тестовом окне), query тоже разный (`QT,TURNSPEED` vs `QR,TILTSPEED`).
+  - **Контекст:** targeted probes после speed-matrix.
+  - **Решение:** добавить provisional bounds в конфиг и использовать только как валидационные guard-rails до калибровки deg/s.
+  - **Harness Update:** `revopoint-speed-decode-tilt-high-range.json`, `revopoint-speed-decode-tilt-threshold.json`, `revopoint-speed-decode-rotate-threshold.json`, speed-query артефакты.
+- **(2026-03-06 17:00) Сюрприз:** калибровочный прогон tilt может временно падать с `BleakDeviceNotFoundError`, но повторный запуск проходит штатно.
+  - **Контекст:** первый запуск `timing_probe` для tilt вернул `runs=0` из-за отсутствия устройства в момент коннекта.
+  - **Решение:** повторный прогон и фиксация успешного артефакта; учитывать transient BLE availability в процедуре.
+  - **Harness Update:** `revopoint-timing-tilt-20-calibration-rerun.json`.
+- **(2026-03-06 17:00) Сюрприз:** фактическая длительность движения существенно зависит от startup delay и не совпадает с "голой" формулой по углу.
+  - **Контекст:** пользователь дал ручные наблюдения start/finish по 6 калибровочным сценариям.
+  - **Решение:** включить в модель отдельные startup delays по осям и консервативные deg/s значения.
+  - **Harness Update:** обновлен `MOTION_TIMING` в `scripts/turntable_config.py`, уточнена формула в `scripts/turntable_runtime_singleflight.py`.
+- **(2026-03-06 17:00) Сюрприз:** transient BLE-сбои (`DeviceNotFound`) и невалидные speed значения ломают полевые прогоны без явной защиты на уровне runtime/probe.
+  - **Контекст:** периодические ошибки connect в calibration-процессе и speed decode результаты с осевыми порогами.
+  - **Решение:** добавить retry connect в probe-скрипты и speed bounds в runtime валидацию (`set_rotate_speed`, `set_tilt_speed`).
+  - **Harness Update:** `turntable_protocol_probe.py`, `turntable_timing_probe.py`, `turntable_speed_decode_probe.py`, `turntable_runtime_singleflight.py`, `turntable_tool_adapter.py`.
+- **(2026-03-06 17:00) Сюрприз:** командный ACK на dual-axis dispatch приходит быстро (десятки миллисекунд), но это не эквивалентно физической высокочастотной стабилизации.
+  - **Контекст:** `dual_axis_probe` с gap 50ms и проверкой `speed+move` для обеих осей.
+  - **Решение:** выделить agent CLI слой и явно разделять command-level latency vs motion-level latency в документации.
+  - **Harness Update:** `scripts/turntable_dual_axis_probe.py`, `scripts/turntable_tool_cli.py`, артефакт `revopoint-dual-axis-concurrency-probe.json`.
+- **(2026-03-06 17:00) Сюрприз:** без явной инструкции агенту легко спутать "быстрый ACK" и "быструю физику".
+  - **Контекст:** обсуждение сценария балансировки и dual-axis поведения.
+  - **Решение:** оформить отдельный agent instruction с обязательной safety policy и out-of-scope разделом.
+  - **Harness Update:** `docs/references/openclaw-turntable-agent-instruction.md`, `docs/references/turntable-tool-cli-runbook.md`.
+- **(2026-03-06 17:00) Сюрприз:** у "базы 0" есть два валидных смысла (software session zero и hardware power-on zero).
+  - **Контекст:** требование пользователя продумать возврат в исходную базу.
+  - **Решение:** добавить отдельную ручку `turntable_return_base` с авто-выбором режима.
+  - **Harness Update:** `scripts/turntable_tool_adapter.py`, `scripts/turntable_tool_cli.py`, docs references.
+- **(2026-03-06 17:00) Сюрприз:** для завершения инфраструктуры под агента недостаточно runbook-инструкций — нужен отдельный test plan и backlog будущей агентной работы.
+  - **Контекст:** запрос на "шлифовку до конца" и формализацию задач тестирования.
+  - **Решение:** добавить contract test script, тест-план и документ задач будущего агента.
+  - **Harness Update:** `scripts/turntable_tool_adapter_contract_test.py`, `docs/references/openclaw-turntable-test-plan.md`, `docs/references/openclaw-turntable-future-agent-work.md`.
 
 ## 4. Decision Trace (Журнал решений)
 
@@ -106,12 +157,24 @@
 | Сразу внедрить single-flight runtime ядро | Ждать полной расшифровки live-телеметрии | Позволяет безопасно интегрировать tool-ручки уже сейчас с контролируемыми рисками | 2026-03-06 |
 | Отделить tool-контракт от runtime-ядра | Отдавать runtime напрямую во внешний слой | Стабильный API для агента и более безопасная эволюция внутренних механизмов | 2026-03-06 |
 | Добавить Product Spec + smoke harness до OpenClaw-интеграции | Согласовывать только по техдокам и ручным проверкам | Снижает риск потери цели и регрессов API-контракта | 2026-03-06 |
+| Вынести speed calibration в отдельный этап | Сразу завязывать completion-модель на speed-команды | Текущий протокол speed-команд не стабилен, нужен отдельный decode | 2026-03-06 |
+| Разделить speed decode по осям | Искать единый валидный диапазон для rotate/tilt | Фактические ответы показывают разную семантику/валидность команд | 2026-03-06 |
+| Зафиксировать наблюдаемые speed bounds как provisional | Игнорировать bounds до полной физической калибровки | Позволяет уже сейчас валидировать вход tool-слоя и избегать явных `FAIL` | 2026-03-06 |
+| Калибровать speed->deg/s через ручные наблюдения | Оценивать deg/s только по ACK-телеметрии | Текущая телеметрия не является надежным live-энкодером | 2026-03-06 |
+| Включить startup delay в completion estimate | Использовать только `angle/deg_s + buffer` | Ручные замеры показали систематическую задержку старта | 2026-03-06 |
+| Валидировать speed bounds на входе runtime | Передавать любые значения и ловить FAIL от устройства | Проактивно снижаем ошибочные команды и упрощаем поведение tool-слоя | 2026-03-06 |
+| Разделить CLI/tool слой и probe слой | Вызывать runtime напрямую в ручных тестах | Упрощает интеграцию с OpenClaw и эксплуатационные проверки | 2026-03-06 |
+| Зафиксировать agent instruction отдельно от техдока | Полагаться только на знания из runtime-кода | Снижает риск неправильной стратегии вызовов в автономной работе агента | 2026-03-06 |
+| Развести `software_zero` и `power_on_zero` как разные reference frames | Считать "0" единственным и всегда абсолютным | Уменьшаем риск логических ошибок при возврате в базу после перезапуска/реконнекта | 2026-03-06 |
+| Добавить отдельный test plan + future backlog | Ограничиться только технической реализацией ручек | Обеспечивает управляемый переход к следующему агенту/этапу интеграции | 2026-03-06 |
 
 ## 5. Leftover Tech Debt (Оставшийся технический долг)
 
 - [x] Подтвердить поддержку hardware-feedback для `rotate` и `tilt`. (query+notify на `FFE1`)
 - [ ] Подтвердить модель завершения команды (ACK/notify или расчетное ожидание).
 - [ ] Формализовать тайминговую модель завершения движения (в т.ч. safety buffer) и валидацию на 2-3 скоростях.
+- [x] Калибровать соответствие "speed value -> deg/s" для rotate и tilt по ручным наблюдениям.
+- [x] Добавить retry-логику коннекта в probe-скрипты для transient BLE not found.
 - [x] Спроектировать runtime state machine (IDLE/BUSY/ERROR) и политику single-flight для motion tool.
 - [x] Добавить runtime-валидацию и structured error schema в будущий motion runtime.
 - [ ] Расширить smoke/harness до сценариев reconnect + BUSY race + STOP override.

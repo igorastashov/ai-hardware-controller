@@ -148,15 +148,35 @@ async def _run_probe(args: argparse.Namespace) -> dict[str, Any]:
         )
 
     try:
-        async with BleakClient(
-            args.target_address, timeout=BLE_TIMING.connect_timeout_seconds
-        ) as client:
+        client: BleakClient | None = None
+        last_error: Exception | None = None
+        for attempt in range(BLE_TIMING.connect_retry_attempts):
+            try:
+                candidate = BleakClient(
+                    args.target_address, timeout=BLE_TIMING.connect_timeout_seconds
+                )
+                await candidate.connect()
+                client = candidate
+                last_error = None
+                break
+            except Exception as exc:  # noqa: BLE001
+                last_error = exc
+                if attempt < BLE_TIMING.connect_retry_attempts - 1:
+                    await asyncio.sleep(BLE_TIMING.connect_retry_delay_seconds)
+
+        if client is None:
+            raise last_error if last_error is not None else RuntimeError("Connect failed")
+
+        try:
             report["result"]["connected"] = client.is_connected
             await client.start_notify(args.char_uuid, _on_notify)
             await client.write_gatt_char(args.char_uuid, command_bytes, response=False)
             report["result"]["write_sent"] = True
             await asyncio.sleep(args.wait_seconds)
             await client.stop_notify(args.char_uuid)
+        finally:
+            if client.is_connected:
+                await client.disconnect()
     except Exception as exc:  # noqa: BLE001
         report["result"]["errors"].append(
             {

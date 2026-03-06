@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0",
+  "captured_at_utc": "2026-03-06T16:17:53.136397+00:00",
+  "tool": "scripts/turntable_speed_decode_probe.py",
+  "target": {
+    "address": "D3:36:39:34:5D:29",
+    "characteristic_uuid": "0000ffe1-0000-1000-8000-00805f9b34fb"
+  },
+  "config": {
+    "axis": "tilt",
+    "values": [
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40"
+    ]
+  },
+  "results": [
+    {
+      "value": "34",
+      "command": "+CR,TILTSPEED=34;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:54.016220+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "35",
+      "command": "+CR,TILTSPEED=35;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:54.216339+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "36",
+      "command": "+CR,TILTSPEED=36;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:54.403875+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "37",
+      "command": "+CR,TILTSPEED=37;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:54.591259+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "38",
+      "command": "+CR,TILTSPEED=38;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:54.778951+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "39",
+      "command": "+CR,TILTSPEED=39;",
+      "first_response": {
+        "hex": "2b4641494c2c4552523d3030373b",
+        "ascii": "+FAIL,ERR=007;",
+        "accepted": false,
+        "error_code": "007"
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:54.965979+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4641494c2c4552523d3030373b",
+            "ascii": "+FAIL,ERR=007;",
+            "accepted": false,
+            "error_code": "007"
+          }
+        }
+      ]
+    },
+    {
+      "value": "40",
+      "command": "+CR,TILTSPEED=40;",
+      "first_response": {
+        "hex": "2b4f4b3b",
+        "ascii": "+OK;",
+        "accepted": true,
+        "error_code": null
+      },
+      "all_frames": [
+        {
+          "at_utc": "2026-03-06T16:17:55.178703+00:00",
+          "sender": "0000ffe1-0000-1000-8000-00805f9b34fb (Handle: 15): Vendor specific",
+          "payload": {
+            "hex": "2b4f4b3b",
+            "ascii": "+OK;",
+            "accepted": true,
+            "error_code": null
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "accepted_values": [
+      "40"
+    ],
+    "rejected_values": [
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39"
+    ],
+    "timeouts": []
+  },
+  "errors": []
+}
