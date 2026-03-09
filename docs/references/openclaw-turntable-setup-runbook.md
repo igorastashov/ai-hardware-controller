@@ -27,6 +27,24 @@ Terminal User
 - Доступ к устройству по BLE.
 - LAN-доступ OpenClaw-хоста к `192.168.31.97`.
 
+## Two-machine operating model (recommended)
+
+### Machine A (hardware/API host)
+- Здесь находится turntable и BLE-доступ.
+- Здесь запускается `ai-hardware-controller` API (`scripts/run_turntable_host_api.sh`).
+- Здесь подтверждается физическое поведение стола.
+
+### Machine B (OpenClaw host)
+- Здесь установлен OpenClaw и запускается агент (`openclaw tui` / `openclaw agent`).
+- Здесь ставится и настраивается внешний plugin.
+- Здесь ведется операторская работа с tool allowlist и сценариями агента.
+
+### Cross-machine handoff data (must share)
+- Актуальный `baseUrl` (пример: `http://192.168.31.97:8000`).
+- BLE address устройства.
+- Версия plugin/ветка репозитория.
+- Статус последнего acceptance прогона.
+
 ---
 
 ## Step 1. Install OpenClaw
@@ -101,6 +119,8 @@ curl -sS "http://192.168.31.97:8000/health"
 curl -sS -X POST "http://192.168.31.97:8000/state"
 ```
 
+> Этот шаг выполняется на **Machine A**.
+
 ---
 
 ## Step 4. Install external turntable plugin into OpenClaw
@@ -128,6 +148,8 @@ openclaw config set plugins.entries.turntable.config.baseUrl "http://192.168.31.
 ```
 
 Рекомендуется также выставить timeout/retry в `plugins.entries.turntable.config.*`.
+
+> Этот шаг выполняется на **Machine B**.
 
 ---
 
@@ -164,6 +186,8 @@ openclaw gateway restart
 openclaw plugins info turntable
 ```
 
+> Этот шаг выполняется на **Machine B**.
+
 ---
 
 ## Step 6. Talk to agent from terminal
@@ -179,6 +203,8 @@ openclaw tui --session main --deliver
 ```bash
 openclaw agent --message "Проверь состояние turntable и дай краткий отчет"
 ```
+
+> Этот шаг выполняется на **Machine B**, при этом API должен быть активен на **Machine A**.
 
 ---
 
@@ -207,6 +233,14 @@ openclaw agent --message "Проверь состояние turntable и дай 
 - `baseUrl` указывает на `http://192.168.31.97:8000`.
 - Агент из `openclaw tui` успешно вызывает `turntable_state`.
 - Базовый сценарий `home -> move_to -> state -> return_base -> stop` проходит.
+
+## Human handoff checklist (new operator)
+
+- Получены данные доступа и версия репозитория/plugin.
+- Подтверждено, какая машина является Machine A и какая Machine B.
+- На Machine A подтвержден живой API.
+- На Machine B подтвержден plugin load + enabled + allowlist.
+- Пройден минимум `state -> move_to small -> state -> stop`.
 
 ---
 

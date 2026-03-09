@@ -53,6 +53,21 @@ User -> OpenClaw Agent -> turntable_* tools
 - **External Plugin (this repo):** строго типизированный tool surface, safety policy, HTTP mapping, retry/timeout.
 - **Turntable API/runtime (this repo):** исполнение команд и аппаратный контракт.
 
+### Execution Model: Two Machines
+
+- **Machine A (hardware/API host):** репозиторий `ai-hardware-controller`, BLE-доступ к turntable, подъем `turntable_tool_api` на `:8000`.
+- **Machine B (OpenClaw host):** установка/настройка OpenClaw, загрузка внешнего plugin, allowlist tools, агентные сценарии.
+- **Сетевой контракт:** Machine B должен иметь LAN-доступ к `http://<Machine-A-IP>:8000`.
+- **Single source runbook:** `docs/references/openclaw-turntable-setup-runbook.md`.
+
+### Operator Handoff Checklist (для нового человека)
+
+- [ ] На Machine A проверен API (`/health`, `/state`) и зафиксирован актуальный `baseUrl`.
+- [ ] На Machine B установлен OpenClaw и доступна команда `openclaw`.
+- [ ] На Machine B plugin подключается из локального пути к этому репозиторию.
+- [ ] На Machine B настроен allowlist для целевого агента.
+- [ ] Выполнен минимальный сценарий: `state -> home -> move_to -> state -> return_base -> stop`.
+
 ### Contract Freeze Checklist (v1)
 
 | Tool | HTTP endpoint | Success schema | Failure schema |
@@ -151,28 +166,30 @@ User -> OpenClaw Agent -> turntable_* tools
 
 ### Phase F. Интеграция с OpenClaw (без core правок)
 
-- [ ] Шаг F1: Подключить plugin через `openclaw plugins install -l <path>` или `plugins.load.paths`.
-- [ ] Шаг F2: Включить plugin: `plugins.entries.turntable.enabled=true`.
-- [ ] Шаг F3: Включить tools только нужному агенту через `agents.list[].tools.allow`.
-- [ ] Шаг F4: Проверить, что инструменты доступны агенту и недоступны там, где не разрешены.
+- [ ] Шаг F1: Подключить plugin через `openclaw plugins install -l <path>` или `plugins.load.paths`. (**Owner:** Machine B)
+- [ ] Шаг F2: Включить plugin: `plugins.entries.turntable.enabled=true`. (**Owner:** Machine B)
+- [ ] Шаг F3: Включить tools только нужному агенту через `agents.list[].tools.allow`. (**Owner:** Machine B)
+- [ ] Шаг F4: Проверить, что инструменты доступны агенту и недоступны там, где не разрешены. (**Owner:** Machine B)
 - [x] Шаг F5: Зафиксировать операционный профиль включения (dev/staging/prod-like) и rollback-последовательность. (2026-03-09 19:57)
   - **Критерий перехода:** plugin можно отключить без влияния на остальные агенты/инструменты.
 
 ### Phase G. Тестирование
 
-- [ ] Шаг G1: Unit tests plugin client/mappers/config parsing.
-- [ ] Шаг G2: Contract tests tool response schema (`ok/result` vs `ok/error`) и mapping http-status -> tool errors.
+- [ ] Шаг G1: Unit tests plugin client/mappers/config parsing. (**Owner:** Machine B / Node env)
+- [ ] Шаг G2: Contract tests tool response schema (`ok/result` vs `ok/error`) и mapping http-status -> tool errors. (**Owner:** Machine B / Node env)
 - [ ] Шаг G3: Smoke tests без железа:
   - `scripts/turntable_tool_adapter_smoke.py`
   - `scripts/turntable_tool_api_smoke.py`
   - plugin mock-upstream smoke.
+-  - **Owner split:** API/adapter smoke на Machine A (Python env), plugin smoke на Machine B (Node env).
 - [ ] Шаг G4: Hardware acceptance:
   - `state -> home -> move-to -> state -> return-base -> stop`
   - commissioning endpoint
   - busy/failure behavior.
+  - **Owner split:** выполнение команд из Machine B, физическое наблюдение и API health на Machine A.
 - [ ] Шаг G5: Agent E2E сценарии (3-5 пользовательских задач) с проверкой safety policy.
 - [x] Шаг G6: Прогнать `bash scripts/verify.sh`. (2026-03-09 19:57)
-- [ ] Шаг G7: Прогнать негативные сценарии API недоступности/timeout и подтвердить корректный escalation JSON.
+- [ ] Шаг G7: Прогнать негативные сценарии API недоступности/timeout и подтвердить корректный escalation JSON. (**Owner:** обе машины)
 - [x] Шаг G8: Зафиксировать тест-отчет (что пройдено, что отложено) и связать с DoD. (2026-03-09 19:57)
 
 > Примечание: тестовые файлы для G1/G2/G7 добавлены в пакет plugin, но не исполнены в текущем окружении из-за отсутствия `npm`.
@@ -290,4 +307,8 @@ User -> OpenClaw Agent -> turntable_* tools
 3. Работать по шагам Phase A -> H, отмечая чекбоксы и коммитя по триггерам.
 4. Каждый сюрприз фиксировать в секции `Surprises & Discoveries`.
 5. Перед handoff запускать `bash scripts/verify.sh`.
+6. Сначала согласовать роли по двум машинам:
+   - Machine A: API/BLE operator;
+   - Machine B: OpenClaw/plugin operator.
+7. Идти по `docs/references/openclaw-turntable-setup-runbook.md` шаг за шагом без пропуска acceptance checklist.
 
