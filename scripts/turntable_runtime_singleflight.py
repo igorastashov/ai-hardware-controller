@@ -14,8 +14,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-from bleak import BleakClient
-
 from turntable_config import (
     AXIS_LIMITS,
     BLE_TIMING,
@@ -100,7 +98,7 @@ class TurntableRuntimeSingleFlight:
 
     def __init__(self, address: str) -> None:
         self._address = address
-        self._client = BleakClient(address, timeout=BLE_TIMING.connect_timeout_seconds)
+        self._client = self._create_ble_client(address)
         self._motion_lock = asyncio.Lock()
         self._io_lock = asyncio.Lock()
         self._frames: list[ProtocolFrame] = []
@@ -110,6 +108,16 @@ class TurntableRuntimeSingleFlight:
             last_error_code=None,
             last_error_message=None,
         )
+
+    @staticmethod
+    def _create_ble_client(address: str) -> Any:
+        try:
+            from bleak import BleakClient  # type: ignore
+        except ImportError as exc:
+            raise RuntimeError(
+                "Missing dependency 'bleak'. Install project requirements first."
+            ) from exc
+        return BleakClient(address, timeout=BLE_TIMING.connect_timeout_seconds)
 
     @property
     def state(self) -> RuntimeState:

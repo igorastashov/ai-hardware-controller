@@ -6,39 +6,71 @@ MVP (2026-03-06)
 ## Purpose
 - Быстрый операторский сценарий для ручной работы через `scripts/turntable_tool_cli.py`.
 - Используется перед/во время интеграции с OpenClaw для валидации поведения ручек.
+- Дополнительно покрывает первый запуск FastAPI-ручек и acceptance на реальной механике.
 
 ## Preconditions
 - Turntable включен и доступен по BLE.
 - Python окружение проекта активно (`.venv`).
 - Рабочий адрес (по умолчанию): `D3:36:39:34:5D:29`.
+- Основной shell: Git Bash (без PowerShell).
 
-## Base commands
+## Quick start (Git Bash)
 
-```powershell
-.\.venv\Scripts\python.exe "scripts/turntable_tool_cli.py" --address "D3:36:39:34:5D:29" state
-.\.venv\Scripts\python.exe "scripts/turntable_tool_cli.py" --address "D3:36:39:34:5D:29" home
-.\.venv\Scripts\python.exe "scripts/turntable_tool_cli.py" --address "D3:36:39:34:5D:29" return-base
-.\.venv\Scripts\python.exe "scripts/turntable_tool_cli.py" --address "D3:36:39:34:5D:29" stop
+```bash
+py -3 -m pip install -r requirements.txt
+bash scripts/run_turntable_host_api.sh D3:36:39:34:5D:29 0.0.0.0 8000
 ```
 
-## Move command
+В отдельном терминале:
 
-```powershell
-.\.venv\Scripts\python.exe "scripts/turntable_tool_cli.py" --address "D3:36:39:34:5D:29" move-to --rotation-deg 30 --tilt-deg 10
+```bash
+curl -sS "http://127.0.0.1:8000/health"
+curl -sS -X POST "http://127.0.0.1:8000/state"
 ```
 
-With explicit speed values:
+## OpenClaw endpoint
 
-```powershell
-.\.venv\Scripts\python.exe "scripts/turntable_tool_cli.py" --address "D3:36:39:34:5D:29" move-to --rotation-deg 30 --tilt-deg 10 --rotate-speed 18 --tilt-speed 40
+- OpenClaw в контейнере на этом же ПК: `http://host.docker.internal:8000`
+- OpenClaw на другом устройстве в LAN: `http://192.168.31.97:8000` (или актуальный IPv4 этого хоста)
+- В Docker Desktop на Windows BLE в контейнере обычно недоступен, поэтому BLE API поднимается на host.
+
+## API functional checks (Git Bash)
+
+```bash
+curl -sS -X POST "http://127.0.0.1:8000/state"
+curl -sS -X POST "http://127.0.0.1:8000/home"
+curl -sS -X POST "http://127.0.0.1:8000/move-to" -H "Content-Type: application/json" -d "{\"rotation_deg\":30,\"tilt_deg\":10}"
+curl -sS -X POST "http://127.0.0.1:8000/return-base"
+curl -sS -X POST "http://127.0.0.1:8000/stop"
 ```
 
-## Safe operational loop
-1. `state` -> проверить `ble_connected=true`, `status=IDLE`.
-2. `home` -> зафиксировать программный ноль.
-3. `move-to` с умеренными углами.
-4. `state` -> убедиться, что runtime вернулся в `IDLE`.
-5. При любом сомнении/ошибке -> `stop`.
+С явными speed:
+
+```bash
+curl -sS -X POST "http://127.0.0.1:8000/move-to" -H "Content-Type: application/json" -d "{\"rotation_deg\":30,\"tilt_deg\":10,\"rotate_speed_value\":18,\"tilt_speed_value\":40}"
+```
+
+## One-shot commissioning (recommended first-run)
+
+CLI (самый надежный путь для физической приемки):
+
+```bash
+py -3 scripts/turntable_commissioning.py --address "D3:36:39:34:5D:29"
+```
+
+Консервативный профиль:
+
+```bash
+py -3 scripts/turntable_commissioning.py --address "D3:36:39:34:5D:29" --safe-profile
+```
+
+Через HTTP-ручку:
+
+```bash
+curl -sS -X POST "http://127.0.0.1:8000/commissioning/first-run" \
+  -H "Content-Type: application/json" \
+  -d "{\"max_capability\":true,\"include_busy_check\":true,\"include_stop_check\":true}"
+```
 
 ## Return to base 0
 - `return-base` выбирает режим автоматически:
@@ -62,3 +94,4 @@ With explicit speed values:
 ## Notes
 - ACK `+OK;` подтверждает прием команды, но не эквивалентен high-frequency servo control.
 - Для сценариев балансировки (высокая частота коррекции) текущий канал/модель не предназначены.
+- Если API запущен в Docker container и возвращает `BLE_CONNECT_FAILED`, используйте host запуск через `bash scripts/run_turntable_host_api.sh ...`.

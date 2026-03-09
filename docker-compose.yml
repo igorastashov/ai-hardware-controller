@@ -1,0 +1,19 @@
+services:
+  turntable-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ai-hardware-controller/turntable-api:local
+    container_name: turntable-api
+    restart: unless-stopped
+    environment:
+      TURNTABLE_ADDRESS: ${TURNTABLE_ADDRESS:-D3:36:39:34:5D:29}
+      TURNTABLE_HOST: ${TURNTABLE_HOST:-0.0.0.0}
+      TURNTABLE_PORT: ${TURNTABLE_PORT:-8000}
+    command: >
+      python scripts/turntable_tool_api.py
+      --address ${TURNTABLE_ADDRESS:-D3:36:39:34:5D:29}
+      --host ${TURNTABLE_HOST:-0.0.0.0}
+      --port ${TURNTABLE_PORT:-8000}
+    ports:
+      - "${TURNTABLE_PORT:-8000}:8000"

@@ -1,0 +1,9 @@
+.git
+.cursor
+docs/exec-plans/completed
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.venv
+venv

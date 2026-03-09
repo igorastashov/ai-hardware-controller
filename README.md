@@ -8,9 +8,42 @@
 # Клонирование
 git clone <url> && cd ai-hardware-controller
 
+# Установка Python-зависимостей
+py -3 -m pip install -r requirements.txt
+
 # Проверка целостности проекта
 bash scripts/verify.sh
 ```
+
+Для Windows/PowerShell используйте:
+
+```powershell
+powershell -File scripts/verify.ps1
+```
+
+## Запуск API через Docker Compose
+
+```powershell
+# Опционально: задать адрес устройства
+$env:TURNTABLE_ADDRESS="D3:36:39:34:5D:29"
+
+# Сборка и запуск сервиса
+docker compose up -d --build
+
+# Проверка статуса
+docker compose ps
+```
+
+> Для Docker Desktop на Windows BLE из контейнера может быть недоступен. Для физического управления и first-run приемки запускайте `scripts/turntable_commissioning.py` в host Python окружении.
+
+Для доступа OpenClaw к host API:
+
+```bash
+bash scripts/run_turntable_host_api.sh D3:36:39:34:5D:29 0.0.0.0 8000
+```
+
+- OpenClaw в контейнере на этом же ПК: `http://host.docker.internal:8000`
+- OpenClaw на другом ПК в локальной сети: `http://192.168.31.97:8000` (проверьте актуальный IPv4 через `ipconfig`)
 
 ## Документация
 

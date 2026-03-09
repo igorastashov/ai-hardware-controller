@@ -168,6 +168,56 @@
 | **Когда вызывать** | Для ручной проверки контракта tool-слоя перед интеграцией в OpenClaw |
 | **Пример вызова** | `python scripts/turntable_tool_cli.py --address D3:36:39:34:5D:29 move-to --rotation-deg 30 --tilt-deg 10 --rotate-speed 18 --tilt-speed 40` |
 
+### `turntable_tool_api.py` — FastAPI-обёртка над tool-контрактом
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Поднимает HTTP-слой (`/state`, `/home`, `/move-to`, `/return-base`, `/stop`) поверх `TurntableToolAdapter` для интеграции с агентом |
+| **Аргументы** | `--address` (required), `--host`, `--port` |
+| **Возвращает** | Долгоживущий API-процесс (Uvicorn) |
+| **Когда вызывать** | Перед подключением OpenClaw/agent runtime к реальной механике через HTTP интерфейс |
+| **Пример вызова** | `python scripts/turntable_tool_api.py --address D3:36:39:34:5D:29 --host 127.0.0.1 --port 8000` |
+
+### `turntable_tool_api_smoke.py` — Smoke-проверка FastAPI ручек без BLE
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Проверяет HTTP-коды и JSON-контракт для всех API-ручек на fake runtime |
+| **Аргументы** | Нет |
+| **Возвращает** | Exit code 0 при успешном smoke, 1 при провале |
+| **Когда вызывать** | После изменений в `turntable_tool_api.py` или контракте adapter/runtime |
+| **Пример вызова** | `python scripts/turntable_tool_api_smoke.py` |
+
+### `turntable_commissioning.py` — Первый запуск и приемка на реальном железе
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Выполняет end-to-end сценарий первого запуска (`state/home/move_to/validation/busy/stop/return_base`) и формирует JSON-отчет готовности |
+| **Аргументы** | `--address` (required), `--safe-profile`, `--skip-busy-check`, `--skip-stop-check` |
+| **Возвращает** | Exit code 0 при `ready=true`, иначе 1 |
+| **Когда вызывать** | Перед первым подключением автономного агента к реальному устройству |
+| **Пример вызова** | `python scripts/turntable_commissioning.py --address D3:36:39:34:5D:29` |
+
+### `run_turntable_host_api.ps1` — Host API launch для OpenClaw
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Запускает BLE API в host Python процессе (не в контейнере) с внешним bind (`0.0.0.0`) для доступа OpenClaw |
+| **Аргументы** | `-Address` (required), `-Host` (default `0.0.0.0`), `-Port` (default `8000`) |
+| **Возвращает** | Долгоживущий API-процесс |
+| **Когда вызывать** | Когда агент/OpenClaw должен дергать ручки через host API, а BLE в Docker недоступен |
+| **Пример вызова** | `powershell -File scripts/run_turntable_host_api.ps1 -Address D3:36:39:34:5D:29 -Port 8000` |
+
+### `run_turntable_host_api.sh` — Host API launch для Git Bash
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Запускает BLE API в host Python процессе через Git Bash без PowerShell |
+| **Аргументы** | `<BLE_ADDRESS>` (required), `[HOST]` (default `0.0.0.0`), `[PORT]` (default `8000`) |
+| **Возвращает** | Долгоживущий API-процесс |
+| **Когда вызывать** | Предпочтительный вариант на Windows, если политика выполнения PowerShell блокирует `.ps1` |
+| **Пример вызова** | `bash scripts/run_turntable_host_api.sh D3:36:39:34:5D:29 0.0.0.0 8000` |
+
 ---
 
 > **Как добавить новый скрипт:**

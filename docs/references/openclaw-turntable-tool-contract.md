@@ -10,6 +10,7 @@
 - `turntable_move_to`
 - `turntable_return_base`
 - `turntable_stop`
+- `turntable_commissioning_first_run`
 
 ## Functional checklist
 - `turntable_state`
@@ -28,6 +29,9 @@
   - иначе: `+CT,TOZERO;` для rotate и `+CR,TILTVALUE=0;` для tilt
 - `turntable_stop()`
   - аварийный стоп обеих осей (`CT,STOP` + `CR,STOP`)
+- `turntable_commissioning_first_run(max_capability?, include_busy_check?, include_stop_check?)`
+  - автоматизированный first-run на реальном устройстве
+  - возвращает `ready` и список checks с деталями по каждому шагу
 
 ## Input constraints
 - `tilt_deg`: `[-30, 30]`
@@ -60,3 +64,4 @@
 ## Known limits
 - Completion model timing-based (не encoder-grade).
 - Для high-frequency balancing control (реальный servo loop) текущий контур не предназначен.
+- В Docker Desktop на Windows BLE может быть недоступен из контейнера; для физического commissioning используйте host Python процесс.
