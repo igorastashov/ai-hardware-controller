@@ -16,7 +16,7 @@ alwaysApply: true
 
 - Для задач сложнее 2 коммитов создавай Exec Plan: скопируй `docs/exec-plans/TEMPLATE.md` в `docs/exec-plans/active/<имя>.md`.
 - Записывай неожиданные находки в секцию `Surprises & Discoveries` своего плана.
-- Перед завершением задачи запусти `bash scripts/verify.sh`.
+- Перед завершением задачи запусти `bash scripts/verify.sh` (Windows/PowerShell: `powershell -File scripts/verify.ps1`).
 
 ## Запреты
 
@@ -52,7 +52,7 @@ alwaysApply: true
 - [x] Commit Harness (микро-коммиты, триггеры, формат).
 - [x] Docs First (`docs/index.md` перед любой задачей).
 - [x] Exec Plan + Surprises & Discoveries (для задач > 2 коммитов).
-- [x] Verify Before Finish (`scripts/verify.sh`).
+- [x] Verify Before Finish (`scripts/verify.sh`; Windows: `powershell -File scripts/verify.ps1`).
 - [x] Multi-agent и immutable-core ограничения.
 
 Если хотя бы один пункт пропущен, агент должен немедленно исправить ответ и дать полное подтверждение.

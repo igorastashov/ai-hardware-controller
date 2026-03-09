@@ -25,7 +25,7 @@
 2. **`BLOCKER: Docs First`**  
    Перед задачей прочитай `docs/index.md`, затем релевантные разделы.
 3. **`BLOCKER: Verify Before Finish`**  
-   Перед завершением запускай `scripts/verify.sh`.
+   Перед завершением запускай `scripts/verify.sh` (Windows/PowerShell: `powershell -File scripts/verify.ps1`).
 4. **`BLOCKER: Exec Plan Discipline`**  
    Для задач сложнее 2 коммитов веди `Exec Plan` в `docs/exec-plans/active/`.
 5. **`BLOCKER: Multi-Agent Safety`**  
@@ -40,7 +40,7 @@
 - [x] Commit Harness принят (микро-коммиты + триггеры + формат).
 - [x] Docs First принят (`docs/index.md` вначале).
 - [x] Exec Plan и Surprises & Discoveries приняты.
-- [x] Verify Before Finish принят (`scripts/verify.sh`).
+- [x] Verify Before Finish принят (`scripts/verify.sh`; Windows: `powershell -File scripts/verify.ps1`).
 - [x] Ограничения multi-agent/immutable core приняты.
 
 Если любой пункт не подтвержден явно, ответ считается неполным и должен быть перегенерирован.
@@ -53,7 +53,7 @@
 
 3. **Записывай сюрпризы.** Если обнаружил неожиданное поведение — запиши в секцию `Surprises & Discoveries` своего Exec Plan. По возможности — закрепи тестом.
 
-4. **Запускай verify перед завершением.** Выполни `scripts/verify.sh` и убедись, что ошибок нет.
+4. **Запускай verify перед завершением.** Выполни `scripts/verify.sh` (Windows/PowerShell: `powershell -File scripts/verify.ps1`) и убедись, что ошибок нет.
 
 5. **Не читай `/completed/` целиком.** Папка `docs/exec-plans/completed/` — архив. Используй семантический поиск (Semantic Search) или grep для нахождения нужного контекста. Никогда не перебирай все файлы.
 
@@ -67,7 +67,7 @@
 
 В agent-first среде исправления стоят дешево, а потеря контекста — дорого. Ты должен фиксировать состояние (создавать git commit) по жестким триггерам:
 1. **Шаг плана (step):** Выполнил один пункт из `Exec Plan` (обновил чекбокс + написал код) -> commit.
-2. **Зеленый линтер (harness/fix):** Запустил `scripts/verify.sh` и получил 0 ошибок -> commit.
+2. **Зеленый линтер (harness/fix):** Запустил `scripts/verify.sh` (или на Windows `powershell -File scripts/verify.ps1`) и получил 0 ошибок -> commit.
 3. **Сюрприз (harness):** Написал тест/скрипт, фиксирующий неожиданное поведение -> commit.
 4. **Пауза (wip):** Перед делегированием человеку или долгой паузой -> commit.
 

@@ -22,6 +22,18 @@
 | **Возвращает** | Exit code 0 = всё ок, non-zero = есть ошибки |
 | **Когда вызывать** | Перед завершением любой задачи (обязательно) |
 | **Пример вызова** | `bash scripts/verify.sh` |
+| **Windows-обёртка** | `powershell -File scripts/verify.ps1` |
+
+### `verify.ps1` — Кроссплатформенный запуск verify на Windows
+
+| Параметр | Значение |
+|---|---|
+| **Назначение** | Запускает `scripts/verify.sh` через доступный `bash` (предпочтительно Git Bash) в PowerShell-среде |
+| **Аргументы** | Нет |
+| **Переменные окружения** | `VERIFY_BASH` (опционально: путь к конкретному `bash.exe`) |
+| **Возвращает** | Exit code целевого `verify.sh` |
+| **Когда вызывать** | На Windows/PowerShell, если `bash scripts/verify.sh` недоступен или использует проблемный WSL |
+| **Пример вызова** | `powershell -File scripts/verify.ps1` |
 
 ### `check_docs_blockers_sync.py` — Проверка синхронности критичных правил
 
