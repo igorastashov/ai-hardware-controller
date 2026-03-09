@@ -13,7 +13,7 @@ ERRORS=0
 
 # --- Секция 1: Проверка структуры каркаса ---
 echo ""
-echo "[1/3] Проверка иммутабельных файлов каркаса..."
+echo "[1/4] Проверка иммутабельных файлов каркаса..."
 
 REQUIRED_FILES=(
   "AGENTS.md"
@@ -41,14 +41,38 @@ if [ $ERRORS -eq 0 ]; then
   echo "  OK: Все файлы каркаса на месте."
 fi
 
-# --- Секция 2: Линтинг (заглушка) ---
+# --- Секция 2: Синхронность критичных правил в документации ---
 echo ""
-echo "[2/3] Линтинг..."
+echo "[2/4] Проверка синхронности BLOCKER-правил..."
+PYTHON_CMD=()
+if command -v python >/dev/null 2>&1 && python -c "import sys" >/dev/null 2>&1; then
+  PYTHON_CMD=(python)
+elif command -v python3 >/dev/null 2>&1 && python3 -c "import sys" >/dev/null 2>&1; then
+  PYTHON_CMD=(python3)
+elif command -v py >/dev/null 2>&1 && py -3 -c "import sys" >/dev/null 2>&1; then
+  PYTHON_CMD=(py -3)
+else
+  echo "  ОШИБКА: Не найден Python интерпретатор (python/python3/py)."
+  ERRORS=$((ERRORS + 1))
+fi
+
+if [ ${#PYTHON_CMD[@]} -gt 0 ] && "${PYTHON_CMD[@]}" scripts/check_docs_blockers_sync.py; then
+  echo "  OK: Чеклисты критичных правил синхронизированы."
+else
+  if [ ${#PYTHON_CMD[@]} -gt 0 ]; then
+    echo "  ОШИБКА: Несинхронизированные критичные правила в документации."
+    ERRORS=$((ERRORS + 1))
+  fi
+fi
+
+# --- Секция 3: Линтинг (заглушка) ---
+echo ""
+echo "[3/4] Линтинг..."
 echo "  ПРОПУСК: Линтер не настроен. Добавь проверки при выборе стека."
 
-# --- Секция 3: Тесты (заглушка) ---
+# --- Секция 4: Тесты (заглушка) ---
 echo ""
-echo "[3/3] Тесты..."
+echo "[4/4] Тесты..."
 echo "  ПРОПУСК: Тесты не настроены. Добавь проверки при появлении кода."
 
 # --- Итог ---
