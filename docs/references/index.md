@@ -46,6 +46,7 @@ x.y.z
 | 9 | `docs/references/openclaw-turntable-plugin-integration-guide.md` | OpenClaw Plugin Integration Guide | Пошаговое подключение plugin, конфиг, allowlist policy и rollback |
 | 10 | `docs/references/openclaw-turntable-plugin-test-report-v1.md` | OpenClaw Plugin Test Report | Сводка покрытия и ограничений тестирования в текущем окружении |
 | 11 | `docs/references/openclaw-turntable-setup-runbook.md` | OpenClaw + Turntable Setup Runbook | Операторский путь от установки OpenClaw до вызова turntable tools из терминала |
+| 12 | `docs/references/openclaw-turntable-operator-workflow.md` | OpenClaw Turntable Operator Workflow | Ежедневный рабочий режим: запуск, промпты tool-only, безопасный сценарий и быстрый troubleshooting |
 
 ---
 

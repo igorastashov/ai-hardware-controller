@@ -230,7 +230,8 @@ export function createTurntablePlugin(rawConfig?: PluginConfigInput): TurntableP
         if (!preState.ok) {
           return safeStop("State pre-check failed before motion.");
         }
-        const status = String((preState.result as TurntableStateResult).status ?? "");
+        const preStateResult = preState.result as unknown as Partial<TurntableStateResult>;
+        const status = String(preStateResult.status ?? "");
         if (status !== "IDLE") {
           return mapPolicyError("DEVICE_NOT_IDLE", `Motion blocked: runtime status is '${status}'.`, {
             pre_state: preState.result,
@@ -241,7 +242,7 @@ export function createTurntablePlugin(rawConfig?: PluginConfigInput): TurntableP
         lastSideEffectAt = nowMs();
         lastMotion = parsed;
         lastMotionAt = nowMs();
-        const move = await call("/move-to", "MOVE_FAILED", parsed);
+        const move = await call("/move-to", "MOVE_FAILED", parsed as unknown as Record<string, unknown>);
         motionInFlight = false;
         if (!move.ok) {
           return safeStop("Motion command failed or ambiguous state detected.");

@@ -8,7 +8,6 @@
     "properties": {
       "baseUrl": {
         "type": "string",
-        "format": "uri",
         "default": "http://192.168.31.97:8000"
       },
       "timeoutMs": {
@@ -32,11 +31,7 @@
             "maximum": 10000,
             "default": 400
           }
-        },
-        "required": [
-          "maxAttempts",
-          "backoffMs"
-        ]
+        }
       },
       "safety": {
         "type": "object",
@@ -57,12 +52,7 @@
             "minimum": 1,
             "default": 40
           }
-        },
-        "required": [
-          "maxTiltDeg",
-          "minRotateSpeed",
-          "minTiltSpeed"
-        ]
+        }
       },
       "allowSideEffects": {
         "type": "boolean",
@@ -80,13 +70,7 @@
         "maximum": 10000,
         "default": 1500
       }
-    },
-    "required": [
-      "baseUrl",
-      "timeoutMs",
-      "retry",
-      "safety"
-    ]
+    }
   },
   "uiHints": {
     "category": "hardware-control",

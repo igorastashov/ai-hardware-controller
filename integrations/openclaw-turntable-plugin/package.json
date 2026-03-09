@@ -1,11 +1,16 @@
 {
-  "name": "@ai-hardware-controller/openclaw-turntable-plugin",
+  "name": "turntable",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "description": "External OpenClaw plugin for Revopoint turntable tools.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "openclaw": {
+    "extensions": [
+      "./dist/index.js"
+    ]
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",

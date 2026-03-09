@@ -166,12 +166,13 @@ User -> OpenClaw Agent -> turntable_* tools
 
 ### Phase F. Интеграция с OpenClaw (без core правок)
 
-- [ ] Шаг F1: Подключить plugin через `openclaw plugins install -l <path>` или `plugins.load.paths`. (**Owner:** Machine B)
-- [ ] Шаг F2: Включить plugin: `plugins.entries.turntable.enabled=true`. (**Owner:** Machine B)
-- [ ] Шаг F3: Включить tools только нужному агенту через `agents.list[].tools.allow`. (**Owner:** Machine B)
+- [x] Шаг F1: Подключить plugin через `openclaw plugins install -l <path>` или `plugins.load.paths`. (2026-03-09 22:30) (**Owner:** Machine B)
+- [x] Шаг F2: Включить plugin: `plugins.entries.turntable.enabled=true`. (2026-03-09 22:31) (**Owner:** Machine B)
+- [x] Шаг F3: Включить tools только нужному агенту через `agents.list[].tools.allow`. (2026-03-09 22:35) (**Owner:** Machine B)
 - [ ] Шаг F4: Проверить, что инструменты доступны агенту и недоступны там, где не разрешены. (**Owner:** Machine B)
 - [x] Шаг F5: Зафиксировать операционный профиль включения (dev/staging/prod-like) и rollback-последовательность. (2026-03-09 19:57)
   - **Критерий перехода:** plugin можно отключить без влияния на остальные агенты/инструменты.
+- [ ] Шаг F6: Устранить runtime-блокер OpenClaw 2026.3.8 — plugin tools регистрируются, но не попадают в agent toolset (`Tool ... not found`). (**Owner:** Machine B, upstream/OpenClaw)
 
 ### Phase G. Тестирование
 
@@ -280,6 +281,10 @@ User -> OpenClaw Agent -> turntable_* tools
   - **Контекст:** попытка запуска smoke-скриптов API после добавления plugin-слоя.
   - **Решение:** зафиксировать блокер окружения и оставить API smoke в статусе pending до установки Python-зависимостей.
   - **Harness Update:** отчет обновлен в `docs/references/openclaw-turntable-plugin-test-report-v1.md`.
+- **(2026-03-09 22:40) Сюрприз:** в OpenClaw `2026.3.8` plugin успешно загружается и `registerTool(...)` вызывается, но `turntable_*` не появляются в toolset агента (`Tool turntable_state not found`, агент видит только core tools, например `session_status`).
+  - **Контекст:** проверка `openclaw plugins info turntable`, runtime-логи gateway и команды `openclaw agent --agent main --session-id ...`.
+  - **Решение:** зафиксирован fallback-режим эксплуатации: управление железом через HTTP API/CLI (Machine A), агент на Machine B используется как операторский ассистент для сценариев/интерпретации результатов до фикса upstream.
+  - **Harness Update:** обновлены runbook-файлы `docs/references/openclaw-turntable-operator-workflow.md`, `docs/references/openclaw-turntable-setup-runbook.md`, `docs/references/openclaw-turntable-plugin-integration-guide.md`.
 
 ## 7. Decision Trace (Журнал решений)
 

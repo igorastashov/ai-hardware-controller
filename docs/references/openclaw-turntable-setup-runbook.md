@@ -69,6 +69,20 @@ openclaw --version
 openclaw doctor
 ```
 
+Если `openclaw: command not found` в новом терминале:
+
+```bash
+echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+openclaw --version
+```
+
+Вне зависимости от PATH всегда можно вызвать бинарник напрямую:
+
+```bash
+/home/<user>/.npm-global/bin/openclaw --version
+```
+
 ---
 
 ## Step 2. Initial OpenClaw onboarding
@@ -186,6 +200,23 @@ openclaw gateway restart
 openclaw plugins info turntable
 ```
 
+CLI-вариант (рекомендуется для Linux onboarding), если `agents.list` еще пуст:
+
+```bash
+openclaw config set agents.list[0].id "main"
+openclaw config set agents.list[0].tools.profile "minimal"
+openclaw config set agents.list[0].tools.allow '[
+  "turntable_state",
+  "turntable_home",
+  "turntable_move_to",
+  "turntable_return_base",
+  "turntable_stop",
+  "turntable_commissioning_first_run"
+]'
+openclaw config set agents.list[0].tools.deny '["group:runtime","group:fs"]'
+openclaw gateway restart
+```
+
 > Этот шаг выполняется на **Machine B**.
 
 ---
@@ -201,7 +232,7 @@ openclaw tui --session main --deliver
 ### One-shot terminal command
 
 ```bash
-openclaw agent --message "Проверь состояние turntable и дай краткий отчет"
+openclaw agent --agent main --session-id main --message "Проверь состояние turntable и дай краткий отчет"
 ```
 
 > Этот шаг выполняется на **Machine B**, при этом API должен быть активен на **Machine A**.
@@ -250,4 +281,6 @@ openclaw agent --message "Проверь состояние turntable и дай 
 - `Connection refused` к `:8000`: проверь, что API реально поднят и слушает LAN-интерфейс.
 - `BLE_CONNECT_FAILED`: перепроверь адрес устройства и host-run API path.
 - Долгие таймауты: увеличь `timeoutMs` в plugin config и сократи частоту motion-команд.
+- `openclaw: command not found`: выполни `source ~/.bashrc` или используй абсолютный путь `/home/<user>/.npm-global/bin/openclaw`.
+- `Tool turntable_state not found` при `plugins info turntable = loaded`: это известный runtime-блокер OpenClaw `2026.3.8`; переходите в fallback-режим (HTTP API/CLI + ассистентный анализ в агенте), см. `docs/references/openclaw-turntable-operator-workflow.md`.
 
