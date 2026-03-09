@@ -56,6 +56,27 @@ docker compose up -d --build
 
 Точка входа для автономных агентов — [`AGENTS.md`](AGENTS.md).
 
+## OpenClaw external plugin integration
+
+Внешний plugin для OpenClaw находится в `integrations/openclaw-turntable-plugin`.
+
+Что дает plugin:
+- tool-surface `turntable_state/home/move_to/return_base/stop/commissioning_first_run`;
+- safety-policy в runtime plugin (pre-state check, anti-flood, idempotency guard, stop on ambiguity);
+- конфигурируемый `baseUrl`, timeout/retry и side-effect gating.
+
+Быстрый цикл разработки plugin:
+
+```bash
+cd integrations/openclaw-turntable-plugin
+npm install
+npm run test
+npm run build
+npm run smoke
+```
+
+Подробный план интеграции: `docs/exec-plans/active/openclaw-turntable-external-plugin-integration.md`.
+
 ## Лицензия
 
 Apache License 2.0 — см. [LICENSE](LICENSE).

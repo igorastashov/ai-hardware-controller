@@ -1,0 +1,130 @@
+{
+  "id": "turntable",
+  "name": "Turntable External Plugin",
+  "version": "0.1.0",
+  "entry": "dist/index.js",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "format": "uri",
+        "default": "http://192.168.31.97:8000"
+      },
+      "timeoutMs": {
+        "type": "integer",
+        "minimum": 1000,
+        "maximum": 120000,
+        "default": 30000
+      },
+      "retry": {
+        "type": "object",
+        "properties": {
+          "maxAttempts": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "default": 2
+          },
+          "backoffMs": {
+            "type": "integer",
+            "minimum": 50,
+            "maximum": 10000,
+            "default": 400
+          }
+        },
+        "required": [
+          "maxAttempts",
+          "backoffMs"
+        ]
+      },
+      "safety": {
+        "type": "object",
+        "properties": {
+          "maxTiltDeg": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 30,
+            "default": 30
+          },
+          "minRotateSpeed": {
+            "type": "number",
+            "minimum": 1,
+            "default": 18
+          },
+          "minTiltSpeed": {
+            "type": "number",
+            "minimum": 1,
+            "default": 40
+          }
+        },
+        "required": [
+          "maxTiltDeg",
+          "minRotateSpeed",
+          "minTiltSpeed"
+        ]
+      },
+      "allowSideEffects": {
+        "type": "boolean",
+        "default": false
+      },
+      "commandGapMs": {
+        "type": "integer",
+        "minimum": 50,
+        "maximum": 5000,
+        "default": 250
+      },
+      "idempotencyWindowMs": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 10000,
+        "default": 1500
+      }
+    },
+    "required": [
+      "baseUrl",
+      "timeoutMs",
+      "retry",
+      "safety"
+    ]
+  },
+  "uiHints": {
+    "category": "hardware-control",
+    "requiresAllowlist": true,
+    "notes": [
+      "Motion-related tools are side-effecting and should be agent-allowlisted."
+    ]
+  },
+  "tools": [
+    {
+      "name": "turntable_state",
+      "sideEffect": false
+    },
+    {
+      "name": "turntable_home",
+      "sideEffect": true,
+      "enabledByDefault": false
+    },
+    {
+      "name": "turntable_move_to",
+      "sideEffect": true,
+      "enabledByDefault": false
+    },
+    {
+      "name": "turntable_return_base",
+      "sideEffect": true,
+      "enabledByDefault": false
+    },
+    {
+      "name": "turntable_stop",
+      "sideEffect": true,
+      "enabledByDefault": false
+    },
+    {
+      "name": "turntable_commissioning_first_run",
+      "sideEffect": true,
+      "optional": true,
+      "enabledByDefault": false
+    }
+  ]
+}

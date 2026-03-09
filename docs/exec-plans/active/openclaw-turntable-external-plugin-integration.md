@@ -53,22 +53,48 @@ User -> OpenClaw Agent -> turntable_* tools
 - **External Plugin (this repo):** строго типизированный tool surface, safety policy, HTTP mapping, retry/timeout.
 - **Turntable API/runtime (this repo):** исполнение команд и аппаратный контракт.
 
+### Contract Freeze Checklist (v1)
+
+| Tool | HTTP endpoint | Success schema | Failure schema |
+|---|---|---|---|
+| `turntable_state` | `POST /state` | `{ ok: true, result: { rotation_deg, tilt_deg, status, ble_connected, zero_calibrated, reference_frame } }` | `{ ok: false, error: { code, message, http_status } }` |
+| `turntable_home` | `POST /home` | `{ ok: true, result: { rotation_deg, tilt_deg, zero_calibrated, reference_frame } }` | `{ ok: false, error: { code, message, http_status } }` |
+| `turntable_move_to` | `POST /move-to` | `{ ok: true, result: { executed, rotation_deg, tilt_deg, zero_calibrated, reference_frame } }` | `{ ok: false, error: { code, message, http_status } }` |
+| `turntable_return_base` | `POST /return-base` | `{ ok: true, result: { mode, executed, rotation_deg, tilt_deg, zero_calibrated, reference_frame } }` | `{ ok: false, error: { code, message, http_status } }` |
+| `turntable_stop` | `POST /stop` | `{ ok: true, result: { ack, status } }` | `{ ok: false, error: { code, message, http_status } }` |
+| `turntable_commissioning_first_run` | `POST /commissioning/first-run` | `{ ok: true, result: { ready, summary, checks } }` | `{ ok: false, error: { code, message, http_status } }` |
+
+### Safety Policy Matrix (v1 runtime policy)
+
+| Trigger | Guard | Action | Escalation |
+|---|---|---|---|
+| Motion call requested | Pre-state check via `turntable_state` | If `status != IDLE`, reject motion | Return deterministic policy error |
+| Side-effect tool call | `allowSideEffects == true` | If disabled, reject call | Operator enables allowlist/policy |
+| Rapid repeated calls | `commandGapMs` anti-flood | Reject call in guard window | Agent must slow down call cadence |
+| Duplicate `move_to` | `idempotencyWindowMs` | Skip deterministic duplicate move | Agent re-checks `state` before next action |
+| Upstream/API ambiguity | transport/contract failure | Execute `turntable_stop` best-effort | Return structured escalation context |
+
+### v1 Scope Freeze
+
+- **In scope (v1):** external plugin package, config schema, tool registration, runtime safety guards, skill, docs/runbook/release notes.
+- **Out of scope (v1):** high-frequency balancing loop, closed-loop servo control, OpenClaw core modifications, automatic physical calibration.
+
 ## 3. Execution Steps (Шаги выполнения)
 
 ### Phase A. План и freeze контракта
 
-- [ ] Шаг A1: Зафиксировать v1 контракт ручек и коды ошибок как source of truth (док + чеклист соответствия в плане).
+- [x] Шаг A1: Зафиксировать v1 контракт ручек и коды ошибок как source of truth (док + чеклист соответствия в плане). (2026-03-09 19:57)
   - **Deliverables:** таблица `tool -> endpoint -> expected success/error schema`.
-- [ ] Шаг A2: Зафиксировать safety policy как runtime policy (не только текст skill): pre-state, busy gate, stop-on-ambiguity, no parallel motion.
+- [x] Шаг A2: Зафиксировать safety policy как runtime policy (не только текст skill): pre-state, busy gate, stop-on-ambiguity, no parallel motion. (2026-03-09 19:57)
   - **Deliverables:** policy matrix (`trigger -> guard -> action -> escalation`).
-- [ ] Шаг A3: Зафиксировать scope v1 (обязательные ручки, optional commissioning, out-of-scope high-frequency balancing).
+- [x] Шаг A3: Зафиксировать scope v1 (обязательные ручки, optional commissioning, out-of-scope high-frequency balancing). (2026-03-09 19:57)
   - **Deliverables:** явный In/Out scope список и критерии переноса в backlog.
-- [ ] Шаг A4: Добавить phase gate для перехода к разработке plugin-кода.
+- [x] Шаг A4: Добавить phase gate для перехода к разработке plugin-кода. (2026-03-09 19:57)
   - **Критерий перехода:** A1-A3 отмечены, противоречий в контракте и policy не осталось.
 
 ### Phase B. Каркас внешнего plugin-пакета
 
-- [ ] Шаг B1: Создать пакет `integrations/openclaw-turntable-plugin/` с файлами:
+- [x] Шаг B1: Создать пакет `integrations/openclaw-turntable-plugin/` с файлами: (2026-03-09 19:57)
   - `package.json`
   - `openclaw.plugin.json`
   - `index.ts`
@@ -76,21 +102,21 @@ User -> OpenClaw Agent -> turntable_* tools
   - `src/client.ts`
   - `src/mappers.ts`
   - `skills/turntable/SKILL.md`
-- [ ] Шаг B2: Добавить `openclaw.plugin.json` с `id`, `configSchema`, `uiHints`.
-- [ ] Шаг B3: Зарегистрировать tools:
+- [x] Шаг B2: Добавить `openclaw.plugin.json` с `id`, `configSchema`, `uiHints`. (2026-03-09 19:57)
+- [x] Шаг B3: Зарегистрировать tools: (2026-03-09 19:57)
   - `turntable_state`
   - `turntable_home`
   - `turntable_move_to`
   - `turntable_return_base`
   - `turntable_stop`
   - `turntable_commissioning_first_run` (optional)
-- [ ] Шаг B4: Обозначить side-effect tools как `optional` и подготовить allowlist-only включение.
-- [ ] Шаг B5: Добавить минимальный smoke entrypoint plugin без сетевых вызовов (health/config check).
+- [x] Шаг B4: Обозначить side-effect tools как `optional` и подготовить allowlist-only включение. (2026-03-09 19:57)
+- [x] Шаг B5: Добавить минимальный smoke entrypoint plugin без сетевых вызовов (health/config check). (2026-03-09 19:57)
   - **Критерий перехода:** plugin грузится OpenClaw без runtime-исключений.
 
 ### Phase C. Конфиг и управление окружением
 
-- [ ] Шаг C1: Вынести в plugin config:
+- [x] Шаг C1: Вынести в plugin config: (2026-03-09 19:57)
   - `baseUrl` (default `http://192.168.31.97:8000`)
   - `timeoutMs`
   - `retry.maxAttempts`
@@ -98,29 +124,29 @@ User -> OpenClaw Agent -> turntable_* tools
   - `safety.maxTiltDeg`
   - `safety.minRotateSpeed`
   - `safety.minTiltSpeed`
-- [ ] Шаг C2: Подготовить пример операторской настройки через `openclaw config set`.
-- [ ] Шаг C3: Добавить fallback policy: network/API error -> structured tool error без silent success.
-- [ ] Шаг C4: Добавить startup-валидацию конфига plugin (тип, диапазоны, обязательные поля).
+- [x] Шаг C2: Подготовить пример операторской настройки через `openclaw config set`. (2026-03-09 19:57)
+- [x] Шаг C3: Добавить fallback policy: network/API error -> structured tool error без silent success. (2026-03-09 19:57)
+- [x] Шаг C4: Добавить startup-валидацию конфига plugin (тип, диапазоны, обязательные поля). (2026-03-09 19:57)
   - **Критерий перехода:** неверный конфиг детерминированно отклоняется до первого tool-вызова.
 
 ### Phase D. Safety policy в коде plugin
 
-- [ ] Шаг D1: Перед motion-командой делать `turntable_state` pre-check.
-- [ ] Шаг D2: При `status != IDLE` не запускать motion, возвращать deterministic error.
-- [ ] Шаг D3: Валидировать входы и ranges до HTTP call.
-- [ ] Шаг D4: На ambiguous/failure path делать `turntable_stop` и возвращать эскалационный контекст.
-- [ ] Шаг D5: Добавить локальный anti-flood (простая rate guard/command gap для plugin уровня).
-- [ ] Шаг D6: Добавить deterministic idempotency guard для повторных `move_to` с теми же параметрами в коротком окне.
+- [x] Шаг D1: Перед motion-командой делать `turntable_state` pre-check. (2026-03-09 19:57)
+- [x] Шаг D2: При `status != IDLE` не запускать motion, возвращать deterministic error. (2026-03-09 19:57)
+- [x] Шаг D3: Валидировать входы и ranges до HTTP call. (2026-03-09 19:57)
+- [x] Шаг D4: На ambiguous/failure path делать `turntable_stop` и возвращать эскалационный контекст. (2026-03-09 19:57)
+- [x] Шаг D5: Добавить локальный anti-flood (простая rate guard/command gap для plugin уровня). (2026-03-09 19:57)
+- [x] Шаг D6: Добавить deterministic idempotency guard для повторных `move_to` с теми же параметрами в коротком окне. (2026-03-09 19:57)
   - **Критерий перехода:** нет параллельного motion и нет бесконтрольных повторов команд.
 
 ### Phase E. Skill для агента
 
-- [ ] Шаг E1: Написать `skills/turntable/SKILL.md` с обязательным безопасным циклом:
+- [x] Шаг E1: Написать `skills/turntable/SKILL.md` с обязательным безопасным циклом: (2026-03-09 19:57)
   - `state -> (home once) -> move_to -> state`
   - on error/ambiguity -> `stop -> state -> decide`.
-- [ ] Шаг E2: Добавить таблицу обработки ошибок (`DEVICE_BUSY`, `MOVE_FAILED`, `STOP_FAILED`, `BLE_CONNECT_FAILED`).
-- [ ] Шаг E3: Ограничить поведение skill: no parallel motion, no command flooding, no speculative recovery loops.
-- [ ] Шаг E4: Добавить explicit stop-condition для длинных задач (когда агент обязан эскалировать человеку).
+- [x] Шаг E2: Добавить таблицу обработки ошибок (`DEVICE_BUSY`, `MOVE_FAILED`, `STOP_FAILED`, `BLE_CONNECT_FAILED`). (2026-03-09 19:57)
+- [x] Шаг E3: Ограничить поведение skill: no parallel motion, no command flooding, no speculative recovery loops. (2026-03-09 19:57)
+- [x] Шаг E4: Добавить explicit stop-condition для длинных задач (когда агент обязан эскалировать человеку). (2026-03-09 19:57)
   - **Критерий перехода:** skill-поток однозначен и не допускает unsafe self-retry циклов.
 
 ### Phase F. Интеграция с OpenClaw (без core правок)
@@ -129,7 +155,7 @@ User -> OpenClaw Agent -> turntable_* tools
 - [ ] Шаг F2: Включить plugin: `plugins.entries.turntable.enabled=true`.
 - [ ] Шаг F3: Включить tools только нужному агенту через `agents.list[].tools.allow`.
 - [ ] Шаг F4: Проверить, что инструменты доступны агенту и недоступны там, где не разрешены.
-- [ ] Шаг F5: Зафиксировать операционный профиль включения (dev/staging/prod-like) и rollback-последовательность.
+- [x] Шаг F5: Зафиксировать операционный профиль включения (dev/staging/prod-like) и rollback-последовательность. (2026-03-09 19:57)
   - **Критерий перехода:** plugin можно отключить без влияния на остальные агенты/инструменты.
 
 ### Phase G. Тестирование
@@ -145,18 +171,21 @@ User -> OpenClaw Agent -> turntable_* tools
   - commissioning endpoint
   - busy/failure behavior.
 - [ ] Шаг G5: Agent E2E сценарии (3-5 пользовательских задач) с проверкой safety policy.
-- [ ] Шаг G6: Прогнать `bash scripts/verify.sh`.
+- [x] Шаг G6: Прогнать `bash scripts/verify.sh`. (2026-03-09 19:57)
 - [ ] Шаг G7: Прогнать негативные сценарии API недоступности/timeout и подтвердить корректный escalation JSON.
-- [ ] Шаг G8: Зафиксировать тест-отчет (что пройдено, что отложено) и связать с DoD.
+- [x] Шаг G8: Зафиксировать тест-отчет (что пройдено, что отложено) и связать с DoD. (2026-03-09 19:57)
+
+> Примечание: тестовые файлы для G1/G2/G7 добавлены в пакет plugin, но не исполнены в текущем окружении из-за отсутствия `npm`.
+> Примечание: для G3 `turntable_tool_adapter_smoke.py` пройден, но `turntable_tool_api_smoke.py` не запускается без Python-зависимостей (`fastapi`).
 
 ### Phase H. Документация и handoff
 
-- [ ] Шаг H1: Обновить `README.md` разделом "OpenClaw external plugin integration".
-- [ ] Шаг H2: Добавить runbook "оператор при аварии" (forced stop, escalation path, manual recovery).
-- [ ] Шаг H3: Зафиксировать Known Limitations и explicit out-of-scope.
-- [ ] Шаг H4: Подготовить "switch checklist" для запуска следующего агента.
-- [ ] Шаг H5: Обновить индекс справочников при добавлении новых docs (`docs/references/index.md`, при необходимости `docs/index.md`).
-- [ ] Шаг H6: Подготовить release notes v1 для plugin-интеграции (конфиг, ручки, ограничения).
+- [x] Шаг H1: Обновить `README.md` разделом "OpenClaw external plugin integration". (2026-03-09 19:57)
+- [x] Шаг H2: Добавить runbook "оператор при аварии" (forced stop, escalation path, manual recovery). (2026-03-09 19:57)
+- [x] Шаг H3: Зафиксировать Known Limitations и explicit out-of-scope. (2026-03-09 19:57)
+- [x] Шаг H4: Подготовить "switch checklist" для запуска следующего агента. (2026-03-09 19:57)
+- [x] Шаг H5: Обновить индекс справочников при добавлении новых docs (`docs/references/index.md`, при необходимости `docs/index.md`). (2026-03-09 19:57)
+- [x] Шаг H6: Подготовить release notes v1 для plugin-интеграции (конфиг, ручки, ограничения). (2026-03-09 19:57)
 
 > При выполнении шага: `- [x] Шаг ... (YYYY-MM-DD HH:MM)`
 > После каждого выполненного шага — микро-коммит по Commit Harness.
@@ -226,6 +255,14 @@ User -> OpenClaw Agent -> turntable_* tools
     - **Контекст:** ...
     - **Решение:** ...
     - **Harness Update:** ...
+- **(2026-03-09 19:57) Сюрприз:** в окружении отсутствует `npm`, поэтому Node-based plugin tests/build не запускаются локально.
+  - **Контекст:** попытка выполнить `npm install` в `integrations/openclaw-turntable-plugin`.
+  - **Решение:** добавлены тесты и smoke entrypoint в репозиторий, но их запуск вынесен в шаг post-setup (после установки Node/npm).
+  - **Harness Update:** тест-статус и ограничения зафиксированы в `docs/references/openclaw-turntable-plugin-test-report-v1.md`.
+- **(2026-03-09 19:57) Сюрприз:** в окружении есть `python3`, но отсутствует `pip`, поэтому нельзя установить `fastapi` для `turntable_tool_api_smoke.py`.
+  - **Контекст:** попытка запуска smoke-скриптов API после добавления plugin-слоя.
+  - **Решение:** зафиксировать блокер окружения и оставить API smoke в статусе pending до установки Python-зависимостей.
+  - **Harness Update:** отчет обновлен в `docs/references/openclaw-turntable-plugin-test-report-v1.md`.
 
 ## 7. Decision Trace (Журнал решений)
 
@@ -234,6 +271,8 @@ User -> OpenClaw Agent -> turntable_* tools
 | Интеграция через внешний plugin в этом репо | Изменять OpenClaw core | Минимальный риск, чистая ответственность, быстрые итерации | 2026-03-09 |
 | Конфигурируемый `baseUrl` (default LAN) | Жесткий хардкод endpoint | Безопасная эксплуатация и удобство переноса между стендами | 2026-03-09 |
 | Safety в коде plugin + skill | Только skill/промпт | Защита от ошибочных LLM-решений на уровне исполнения | 2026-03-09 |
+| Side-effect tools по умолчанию выключены | Включать все tools всегда | Снижает риск несанкционированных движений и принуждает allowlist-модель | 2026-03-09 |
+| Внедрены anti-flood и idempotency guards в plugin | Полагаться только на runtime/устройство | Дополнительная защита от command flooding и дублирования движения на plugin-уровне | 2026-03-09 |
 
 ## 8. Leftover Tech Debt (Оставшийся технический долг)
 
