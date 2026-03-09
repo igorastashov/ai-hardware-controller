@@ -172,10 +172,10 @@
 
 | Параметр | Значение |
 |---|---|
-| **Назначение** | Поднимает HTTP-слой (`/state`, `/home`, `/move-to`, `/return-base`, `/stop`) поверх `TurntableToolAdapter` для интеграции с агентом |
-| **Аргументы** | `--address` (required), `--host`, `--port` |
+| **Назначение** | Поднимает HTTP-слой (`/state`, `/home`, `/move-to`, `/return-base`, `/stop`, `/commissioning/first-run`, `/commissioning/first-run/full`) поверх `TurntableToolAdapter` |
+| **Аргументы** | `--address` (required), `--host`, `--port`, `--upstream-url` (опционально: proxy mode) |
 | **Возвращает** | Долгоживущий API-процесс (Uvicorn) |
-| **Когда вызывать** | Перед подключением OpenClaw/agent runtime к реальной механике через HTTP интерфейс |
+| **Когда вызывать** | Для host BLE API или как docker gateway (`upstream -> host`) |
 | **Пример вызова** | `python scripts/turntable_tool_api.py --address D3:36:39:34:5D:29 --host 127.0.0.1 --port 8000` |
 
 ### `turntable_tool_api_smoke.py` — Smoke-проверка FastAPI ручек без BLE
@@ -216,7 +216,7 @@
 | **Аргументы** | `<BLE_ADDRESS>` (required), `[HOST]` (default `0.0.0.0`), `[PORT]` (default `8000`) |
 | **Возвращает** | Долгоживущий API-процесс |
 | **Когда вызывать** | Предпочтительный вариант на Windows, если политика выполнения PowerShell блокирует `.ps1` |
-| **Пример вызова** | `bash scripts/run_turntable_host_api.sh D3:36:39:34:5D:29 0.0.0.0 8000` |
+| **Пример вызова** | `bash scripts/run_turntable_host_api.sh D3:36:39:34:5D:29 127.0.0.1 18000` |
 
 ---
 

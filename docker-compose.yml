@@ -10,10 +10,12 @@ services:
       TURNTABLE_ADDRESS: ${TURNTABLE_ADDRESS:-D3:36:39:34:5D:29}
       TURNTABLE_HOST: ${TURNTABLE_HOST:-0.0.0.0}
       TURNTABLE_PORT: ${TURNTABLE_PORT:-8000}
+      TURNTABLE_UPSTREAM_URL: ${TURNTABLE_UPSTREAM_URL:-http://host.docker.internal:18000}
     command: >
       python scripts/turntable_tool_api.py
       --address ${TURNTABLE_ADDRESS:-D3:36:39:34:5D:29}
       --host ${TURNTABLE_HOST:-0.0.0.0}
       --port ${TURNTABLE_PORT:-8000}
+      --upstream-url ${TURNTABLE_UPSTREAM_URL:-http://host.docker.internal:18000}
     ports:
       - "${TURNTABLE_PORT:-8000}:8000"

@@ -18,21 +18,28 @@ MVP (2026-03-06)
 
 ```bash
 py -3 -m pip install -r requirements.txt
-bash scripts/run_turntable_host_api.sh D3:36:39:34:5D:29 0.0.0.0 8000
+bash scripts/run_turntable_host_api.sh D3:36:39:34:5D:29 127.0.0.1 18000
+```
+
+Во втором терминале поднимите сетевой Docker gateway:
+
+```bash
+docker compose up -d --build
+docker compose ps
 ```
 
 В отдельном терминале:
 
 ```bash
-curl -sS "http://127.0.0.1:8000/health"
-curl -sS -X POST "http://127.0.0.1:8000/state"
+curl -sS "http://127.0.0.1:8000/health"                # gateway
+curl -sS -X POST "http://127.0.0.1:8000/state"         # proxy -> host BLE API
 ```
 
 ## OpenClaw endpoint
 
 - OpenClaw в контейнере на этом же ПК: `http://host.docker.internal:8000`
 - OpenClaw на другом устройстве в LAN: `http://192.168.31.97:8000` (или актуальный IPv4 этого хоста)
-- В Docker Desktop на Windows BLE в контейнере обычно недоступен, поэтому BLE API поднимается на host.
+- В Docker Desktop на Windows BLE в контейнере обычно недоступен, поэтому compose-сервис работает как HTTP gateway к host BLE API.
 
 ## API functional checks (Git Bash)
 
@@ -70,6 +77,12 @@ py -3 scripts/turntable_commissioning.py --address "D3:36:39:34:5D:29" --safe-pr
 curl -sS -X POST "http://127.0.0.1:8000/commissioning/first-run" \
   -H "Content-Type: application/json" \
   -d "{\"max_capability\":true,\"include_busy_check\":true,\"include_stop_check\":true}"
+```
+
+Полный first-run без параметров (отдельная ручка):
+
+```bash
+curl -sS -X POST "http://127.0.0.1:8000/commissioning/first-run/full"
 ```
 
 ## Return to base 0

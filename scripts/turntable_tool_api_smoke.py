@@ -105,6 +105,7 @@ def _run() -> dict[str, Any]:
         "/commissioning/first-run",
         json={"max_capability": False, "include_busy_check": False, "include_stop_check": False},
     )
+    commissioning_full = client.post("/commissioning/first-run/full")
 
     checks = {
         "home_200": home.status_code == 200 and home.json().get("ok") is True,
@@ -114,6 +115,8 @@ def _run() -> dict[str, Any]:
         "return_base_200": ret.status_code == 200 and ret.json().get("ok") is True,
         "stop_200": stop.status_code == 200 and stop.json().get("ok") is True,
         "commissioning_200": commissioning.status_code == 200 and commissioning.json().get("ok") is True,
+        "commissioning_full_response": commissioning_full.status_code in (200, 503)
+        and "result" in commissioning_full.json(),
     }
 
     return {

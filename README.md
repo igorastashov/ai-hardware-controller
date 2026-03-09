@@ -39,7 +39,8 @@ docker compose ps
 Для доступа OpenClaw к host API:
 
 ```bash
-bash scripts/run_turntable_host_api.sh D3:36:39:34:5D:29 0.0.0.0 8000
+bash scripts/run_turntable_host_api.sh D3:36:39:34:5D:29 127.0.0.1 18000
+docker compose up -d --build
 ```
 
 - OpenClaw в контейнере на этом же ПК: `http://host.docker.internal:8000`
