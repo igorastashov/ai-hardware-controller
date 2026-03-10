@@ -31,12 +31,14 @@ openclaw config set plugins.entries.turntable.config.commandGapMs 250
 openclaw config set plugins.entries.turntable.config.idempotencyWindowMs 1500
 ```
 
-## Agent allowlist policy
+## Agent tool policy
 Включайте только нужные tools конкретному агенту:
 
 ```bash
 openclaw config set agents.list[0].id "main"
-openclaw config set agents.list[0].tools.allow '[
+openclaw config set agents.list[0].tools.profile "minimal"
+openclaw config unset agents.list[0].tools.allow
+openclaw config set agents.list[0].tools.alsoAllow '[
   "turntable_state",
   "turntable_home",
   "turntable_move_to",
@@ -44,20 +46,22 @@ openclaw config set agents.list[0].tools.allow '[
   "turntable_stop",
   "turntable_commissioning_first_run"
 ]'
+openclaw config set agents.list[0].tools.deny '["group:runtime","group:fs"]'
+openclaw gateway restart
 ```
 
 Если видите ошибку `agents.list.0.id: expected string`, значит агент еще не инициализирован.
-Сначала задайте `agents.list[0].id`, затем повторите allowlist команду.
+Сначала задайте `agents.list[0].id`, затем повторите команды настройки tools.
 
 ## Rollback
 1. Disable plugin:
    - `openclaw config set plugins.entries.turntable.enabled false`
-2. Remove turntable tools from agent allowlist.
+2. Remove turntable tools from `agents.list[].tools.alsoAllow`.
 3. Continue with host-only API/CLI runbook until issue is resolved.
 
 ## Known runtime note (OpenClaw 2026.3.8)
 
-В текущем окружении наблюдался кейс: plugin `turntable` в статусе `loaded`, но `turntable_*` не попадают в фактический toolset агента (`Tool turntable_state not found`).
+В текущем окружении наблюдался кейс: plugin `turntable` в статусе `loaded`, но `turntable_*` не попадают в фактический toolset агента (`Tool turntable_state not found`) при конфигурации `profile=minimal` + plugin-only `tools.allow`.
 
 Проверка перед эскалацией:
 - `openclaw plugins info turntable`

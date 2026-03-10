@@ -5,9 +5,13 @@
 
 ## Current limitation (2026.3.8)
 
-На текущей версии OpenClaw зафиксирован runtime-блокер: `turntable` plugin грузится, но `turntable_*` tools могут не появляться в toolset агента (`Tool turntable_state not found`).
+На OpenClaw `2026.3.8` легко поймать ложный "runtime-блокер": plugin `turntable` загружен, но `turntable_*` tools не попадают в toolset агента (`Tool turntable_state not found`) при конфигурации `tools.profile="minimal"` + plugin-only `tools.allow`.
 
-Пока блокер не устранен, используйте fallback-модель:
+Рабочий фикс:
+- использовать `tools.alsoAllow` для `turntable_*` (а не `tools.allow`), сохраняя `tools.profile="minimal"`;
+- перезапустить gateway и повторить agent one-shot проверку.
+
+Если после этого проблема сохраняется, используйте fallback-модель:
 - Machine A: выполнять команды управления turntable через HTTP API/CLI.
 - Machine B: использовать OpenClaw агент как операторский ассистент (сценарии, интерпретация JSON-ответов, протокол безопасности), а не как прямой исполнитель `turntable_*`.
 
@@ -34,7 +38,8 @@ curl -sS -X POST "http://192.168.31.97:8000/state"
 ```bash
 openclaw config set agents.list[0].id "main"
 openclaw config set agents.list[0].tools.profile "minimal"
-openclaw config set agents.list[0].tools.allow '[
+openclaw config unset agents.list[0].tools.allow
+openclaw config set agents.list[0].tools.alsoAllow '[
   "turntable_state",
   "turntable_home",
   "turntable_move_to",
@@ -54,7 +59,7 @@ openclaw config get agents.list[0].tools
 
 Должны быть:
 - `profile: "minimal"`
-- `allow: ["turntable_*"...]`
+- `alsoAllow: ["turntable_*"...]`
 - `deny: ["group:runtime","group:fs"]`
 
 ## 1) Запуск рабочего сеанса
@@ -152,10 +157,10 @@ openclaw --version
 Проверьте:
 - `plugins.entries.turntable.enabled=true`
 - `agents.list[0].id="main"`
-- `agents.list[0].tools.allow` содержит `turntable_*`
+- `agents.list[0].tools.alsoAllow` содержит `turntable_*`
 - `openclaw plugins info turntable` показывает `Status: loaded`
 
-Если всё выше в норме, но агент всё равно отвечает `Tool ... not found`, переключайтесь в fallback-режим (HTTP API + ассистентный анализ) до фикса upstream.
+Если всё выше в норме, но агент всё равно отвечает `Tool ... not found`, переключайтесь в fallback-режим (HTTP API + ассистентный анализ) и зафиксируйте кейс как upstream issue.
 
 ## 6) Минимальный end-of-shift checklist
 

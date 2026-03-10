@@ -19,7 +19,9 @@ openclaw config set plugins.entries.turntable.enabled true
 openclaw config set plugins.load.paths '["/abs/path/to/integrations/openclaw-turntable-plugin"]'
 openclaw config set plugins.entries.turntable.config.baseUrl "http://192.168.31.97:8000"
 openclaw config set plugins.entries.turntable.config.allowSideEffects true
-openclaw config set agents.list[0].tools.allow '["turntable_state","turntable_move_to","turntable_stop"]'
+openclaw config set agents.list[0].tools.profile "minimal"
+openclaw config unset agents.list[0].tools.allow
+openclaw config set agents.list[0].tools.alsoAllow '["turntable_state","turntable_move_to","turntable_stop"]'
 ```
 
 ## Safety defaults
