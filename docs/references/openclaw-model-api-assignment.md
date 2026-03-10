@@ -35,12 +35,72 @@
 
 ### 1) Принцип переключения
 
-- Сначала меняем конфиг модели/провайдера.
+- Сначала проверяем, что провайдер авторизован.
+- Затем меняем модель (session-level или persistent-level).
 - Затем перезапускаем gateway.
 - После перезапуска делаем короткий smoke-запрос.
 - Только после успешного smoke считаем переключение примененным.
 
-### 2) Минимальный smoke-check
+### 2) Быстрое переключение в текущей сессии (без изменения дефолта)
+
+Используйте в `openclaw tui`:
+
+```text
+/model list
+/model <provider/model>
+/model status
+```
+
+Пример:
+
+```text
+/model openrouter/anthropic/claude-sonnet-4-5
+```
+
+### 3) Переключение по умолчанию (persistent)
+
+```bash
+openclaw models list
+openclaw models set <provider/model>
+openclaw models status
+openclaw gateway restart
+```
+
+Пример:
+
+```bash
+openclaw models set openrouter/google/gemini-2.0-flash-001
+openclaw models status
+openclaw gateway restart
+```
+
+### 4) Смена провайдера (auth + model)
+
+#### OpenRouter
+
+```bash
+openclaw onboard --auth-choice apiKey --token-provider openrouter --token "$OPENROUTER_API_KEY"
+openclaw models set openrouter/anthropic/claude-sonnet-4-5
+openclaw models status
+```
+
+#### OpenAI
+
+```bash
+openclaw onboard --auth-choice openai-api-key
+openclaw models set openai/gpt-5.4
+openclaw models status
+```
+
+#### Anthropic
+
+```bash
+openclaw models auth paste-token --provider anthropic
+openclaw models set anthropic/claude-opus-4-6
+openclaw models status
+```
+
+### 5) Минимальный smoke-check
 
 ```bash
 openclaw --version
@@ -49,7 +109,7 @@ openclaw gateway restart
 openclaw agent --agent main --session-id main --message "Проверь доступность инструментов и ответь коротко."
 ```
 
-### 3) Fallback policy
+### 6) Fallback policy
 
 - При нестабильности нового провайдера возвращаем предыдущее рабочее назначение.
 - Инцидент фиксируем в секции `Change Log` этого документа.
@@ -62,8 +122,10 @@ openclaw agent --agent main --session-id main --message "Проверь дост
 | Config path | Value | Why |
 |---|---|---|
 | `models.providers.<id>` | TBD | Провайдер и ключи |
-| `models.default` | TBD | Дефолтная модель агента |
-| `agents.list[].model` (если используется) | TBD | Точечное назначение для конкретного агента |
+| `agents.defaults.model.primary` | TBD | Дефолтная модель |
+| `agents.defaults.model.fallbacks[]` | TBD | Цепочка fallback |
+| `agents.list[].model` (если используется) | TBD | Переопределение для конкретного агента |
+| `agents.defaults.models` (если используется) | TBD | Allowlist/каталог разрешенных моделей |
 
 ## Known Issues
 
@@ -74,6 +136,7 @@ openclaw agent --agent main --session-id main --message "Проверь дост
 | Date | Change | Author | Verification |
 |---|---|---|---|
 | 2026-03-10 | Создан базовый документ для назначения model/API | Cursor Agent | N/A |
+| 2026-03-10 | Добавлены команды quick switch: `/model`, `openclaw models set`, auth flow для смены провайдера | Cursor Agent | Команды сверены по docs OpenClaw (`concepts/models`, `providers/openrouter`, `concepts/model-providers`) |
 
 ## Culture of Maintenance (обязательные правила ведения)
 
