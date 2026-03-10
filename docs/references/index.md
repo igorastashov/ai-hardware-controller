@@ -47,6 +47,7 @@ x.y.z
 | 10 | `docs/references/openclaw-turntable-plugin-test-report-v1.md` | OpenClaw Plugin Test Report | Сводка покрытия и ограничений тестирования в текущем окружении |
 | 11 | `docs/references/openclaw-turntable-setup-runbook.md` | OpenClaw + Turntable Setup Runbook | Операторский путь от установки OpenClaw до вызова turntable tools из терминала |
 | 12 | `docs/references/openclaw-turntable-operator-workflow.md` | OpenClaw Turntable Operator Workflow | Ежедневный рабочий режим: запуск, промпты tool-only, безопасный сценарий и быстрый troubleshooting |
+| 13 | `docs/references/openclaw-model-api-assignment.md` | OpenClaw Model/API Assignment Guide | Реестр назначений моделей/API (LLM/VLM/audio), quick-switch playbook и культура ведения |
 
 ---
 
